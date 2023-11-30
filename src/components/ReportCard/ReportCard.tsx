@@ -1,11 +1,9 @@
 import { Dot, Link } from '@phosphor-icons/react'
+import { Report } from '../../graphql/generated/graphql'
 import { useReportCard } from '../../hooks'
-import { ReportProps, UserProps } from '../../types'
 
 interface ReportCardProps {
-  report: ReportProps & {
-    user: UserProps
-  }
+  report: Report
   handleCopyLink: (link: string) => void
 }
 
@@ -16,10 +14,13 @@ function ReportCard({ report, handleCopyLink }: ReportCardProps) {
     <article className="flex w-[700px] flex-col gap-4 rounded-md border border-zinc-200 p-6 shadow-sm shadow-zinc-300">
       <header className="flex items-center">
         <div className="flex flex-1 items-center gap-4">
-          <div className="h-14 w-14 rounded-full bg-zinc-300" />
+          <img
+            src={report.reportUser?.photoUrl || ''}
+            className="h-14 w-14 rounded-full"
+          />
           <div className="flex flex-col">
             <div className="flex items-center">
-              <h4 className="font-semibold">{report.user.name}</h4>
+              <h4 className="font-semibold">{report?.reportUser?.name}</h4>
               <Dot
                 weight="bold"
                 size={30}
@@ -27,7 +28,7 @@ function ReportCard({ report, handleCopyLink }: ReportCardProps) {
               />
               <em className="text-sm font-normal not-italic text-zinc-400">Hoje às 12:30</em>
             </div>
-            <em className="text-sm font-normal not-italic text-zinc-400">{report.user.username}</em>
+            <em className="text-sm font-normal not-italic text-zinc-400">{report?.reportUser?.username}</em>
           </div>
         </div>
         <button
@@ -48,19 +49,20 @@ function ReportCard({ report, handleCopyLink }: ReportCardProps) {
             className="line-clamp-2"
             ref={forTodayTextRef}
           >
-            <b>Para hoje:</b> {report.forToday}
+            <b>Para hoje:</b> {report?.forTodayText}
           </p>
           <p
             className="line-clamp-2"
             ref={forNextDayTextRef}
           >
-            <b>Para o dia seguinte:</b> {report.forNextDay}
+            <b>Para o dia seguinte:</b> {report.forNextDayText}
           </p>
           <p
             className="line-clamp-2"
             ref={blocksTextRef}
           >
-            {report.blocks.length > 0 && [<b>Impedimentos/Bloqueios:</b>, ' ', report.blocks]}
+            {report?.blocksText &&
+              report.blocksText.length > 0 && [<b>Impedimentos/Bloqueios:</b>, ' ', report.blocksText]}
           </p>
         </p>
       </div>
@@ -70,7 +72,7 @@ function ReportCard({ report, handleCopyLink }: ReportCardProps) {
           <button
             aria-label="ler mais"
             aria-describedby="ler o report por completo"
-            className="text-primary w-full hover:underline"
+            className="w-full text-primary hover:underline"
           >
             Ler mais
           </button>

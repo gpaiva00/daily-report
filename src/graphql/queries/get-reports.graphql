@@ -1,0 +1,18 @@
+query Reports {
+  reports {
+    id
+    forTodayText
+    forNextDayText
+    blocksText
+    publishedAt
+    createdAt
+    link
+    reportUser {
+      id
+      name
+      photoUrl
+      username
+      email
+    }
+  }
+}

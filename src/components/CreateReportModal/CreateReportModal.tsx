@@ -7,9 +7,10 @@ interface ModalProps {
   toggleModal: () => void
   handleCancelModal: () => void
   handleSubmit: (e: BaseSyntheticEvent) => void
+  isLoading: boolean
 }
 
-function CreateReportModal({ isOpen, toggleModal, handleCancelModal, handleSubmit }: ModalProps) {
+function CreateReportModal({ isOpen, toggleModal, handleCancelModal, handleSubmit, isLoading }: ModalProps) {
   if (isOpen)
     return (
       <>
@@ -87,7 +88,7 @@ function CreateReportModal({ isOpen, toggleModal, handleCancelModal, handleSubmi
                 htmlFor="blocks"
                 className="flex flex-col gap-2 font-semibold"
               >
-                <span>Impedimentos/Bloqueios (opcional):</span>
+                <span>Impedimentos ou bloqueios (opcional):</span>
 
                 <textarea
                   placeholder="Preciso de ajuda com..."
@@ -107,8 +108,10 @@ function CreateReportModal({ isOpen, toggleModal, handleCancelModal, handleSubmi
                 <button
                   aria-label="criar report"
                   type="submit"
+                  data-loading={isLoading}
                   onClick={handleSubmit}
-                  className="bg-primary hover:bg-primary-darken w-full rounded-md p-2 capitalize text-white transition-colors group-invalid:pointer-events-none group-invalid:opacity-30"
+                  disabled={isLoading}
+                  className="w-full rounded-md bg-primary p-2 capitalize text-white transition-colors hover:bg-primary-darken disabled:opacity-30 group-invalid:pointer-events-none group-invalid:opacity-30"
                 >
                   Criar
                 </button>

@@ -1,0 +1,5 @@
+mutation CreateReportUser($email: String = "", $name: String = "", $photoUrl: String = "", $username: String = "") {
+  createReportUser(data: { name: $name, username: $username, email: $email, photoUrl: $photoUrl }) {
+    id
+  }
+}

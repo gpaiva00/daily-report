@@ -1,39 +1,38 @@
-import { BaseSyntheticEvent } from 'react'
-import { useAppService } from '../useAppService'
+import { BaseSyntheticEvent, useEffect } from 'react'
+import { useReport } from '../useReport/useReport'
 
 interface UseAppProps {
   toggleModal: () => void
 }
 
 function useApp({ toggleModal }: UseAppProps) {
-  const { reports, setReports } = useAppService()
+  const { reports, getReports, createReport, getReportsLoading, createReportLoading } = useReport()
 
   function handleCreateReport(e: BaseSyntheticEvent) {
     e.preventDefault()
 
-    const [forToday, forNextDay, blocks] = e.target.form
+    const [forTodayText, forNextDayText, blocksText] = e.target.form
 
-    setReports((prev) => [
-      ...prev,
-      {
-        forToday: forToday.value,
-        forNextDay: forNextDay.value,
-        blocks: blocks.value,
-        link: '',
-        user: {
-          name: 'Gabriel Paiva',
-          username: '@papaiva',
-          photo: '',
-        },
-      },
-    ])
+    createReport({
+      forTodayText,
+      forNextDayText,
+      blocksText,
+      link: 'https://google.com',
+      userID: 'clpkhcjg30lxd0bls9zk03m8q',
+    })
 
     toggleModal()
   }
 
+  useEffect(() => {
+    getReports()
+  }, [])
+
   return {
-    handleCreateReport,
     reports,
+    getReportsLoading,
+    createReportLoading,
+    handleCreateReport,
   }
 }
 

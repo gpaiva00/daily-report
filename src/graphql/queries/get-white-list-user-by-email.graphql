@@ -1,0 +1,5 @@
+query GetWhiteListUserByEmail($email: String = "") {
+  whiteList(where: { email: $email }) {
+    id
+  }
+}

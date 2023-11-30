@@ -1,0 +1,19 @@
+mutation CreateReport(
+  $blocksText: String = ""
+  $forNextDayText: String = ""
+  $forTodayText: String = ""
+  $link: String = ""
+  $userID: ID = ""
+) {
+  createReport(
+    data: {
+      forTodayText: $forTodayText
+      blocksText: $blocksText
+      forNextDayText: $forNextDayText
+      link: $link
+      reportUser: { connect: { id: $userID } }
+    }
+  ) {
+    id
+  }
+}

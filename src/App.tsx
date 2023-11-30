@@ -1,11 +1,11 @@
-import { Balloon, CalendarBlank, PencilSimple, User } from '@phosphor-icons/react'
+import { Balloon, CalendarBlank, CircleNotch, PencilSimple, User } from '@phosphor-icons/react'
 import { CreateReportModal } from './components/CreateReportModal'
 import { ReportCard } from './components/ReportCard'
 import { useApp, useModal } from './hooks'
 
 function App() {
   const { isModalOpen, toggleModal } = useModal()
-  const { reports, handleCreateReport } = useApp({ toggleModal })
+  const { reports, handleCreateReport, getReportsLoading, createReportLoading } = useApp({ toggleModal })
 
   return (
     <>
@@ -14,6 +14,7 @@ function App() {
         toggleModal={toggleModal}
         handleCancelModal={() => {}}
         handleSubmit={handleCreateReport}
+        isLoading={createReportLoading}
       />
       <main className="flex h-screen w-full flex-col">
         <header className="flex w-full items-center justify-between px-24 pt-8">
@@ -49,25 +50,35 @@ function App() {
           </div>
         </header>
 
-        <section className="flex h-screen flex-1 flex-col items-center gap-8 overflow-y-scroll pb-12 pt-8">
-          {!reports.length && (
-            <div className="flex h-full flex-col items-center justify-center gap-4">
-              <p className="text-zinc-500">Ainda não há reports por aqui.</p>
-              <Balloon
-                size={56}
-                weight="light"
-                className="rotate-12 text-zinc-400"
-              />
-            </div>
-          )}
-          {reports.map((report, key) => (
-            <ReportCard
-              handleCopyLink={() => {}}
-              report={report}
-              key={key}
+        {getReportsLoading && (
+          <div className="flex h-full w-full items-center justify-center">
+            <CircleNotch
+              size={40}
+              className="animate-spin text-black"
             />
-          ))}
-        </section>
+          </div>
+        )}
+        {!getReportsLoading && (
+          <section className="flex h-screen flex-1 flex-col items-center gap-8 overflow-y-scroll pb-12 pt-8">
+            {!reports.length && (
+              <div className="flex h-full flex-col items-center justify-center gap-4">
+                <p className="text-zinc-500">Ainda não há reports por aqui.</p>
+                <Balloon
+                  size={56}
+                  weight="light"
+                  className="rotate-12 text-zinc-400"
+                />
+              </div>
+            )}
+            {reports.map((report, key) => (
+              <ReportCard
+                handleCopyLink={() => {}}
+                report={report}
+                key={key}
+              />
+            ))}
+          </section>
+        )}
       </main>
     </>
   )
