@@ -34,7 +34,7 @@ function CreateReportModal({ isOpen, toggleModal, handleCancelModal, handleSubmi
           )}
         >
           <header className="flex items-center justify-between">
-            <h3 className="font-bold uppercase">Criar report</h3>
+            <h1 className="text-lg font-bold capitalize">Criar report</h1>
             <button
               aria-label="fechar janela"
               className="rounded-full p-2 transition-colors hover:bg-zinc-200"
@@ -101,7 +101,7 @@ function CreateReportModal({ isOpen, toggleModal, handleCancelModal, handleSubmi
                 <button
                   aria-label="cancelar"
                   onClick={handleCancelModal}
-                  className="w-full rounded-md border border-zinc-900 p-2 capitalize transition-colors hover:border-zinc-200 hover:bg-zinc-200"
+                  className="w-full rounded-md border border-zinc-300 p-2 capitalize transition-colors hover:border-zinc-200 hover:bg-zinc-200"
                 >
                   Cancelar
                 </button>

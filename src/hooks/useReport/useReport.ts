@@ -1,34 +1,45 @@
-import { useState } from 'react'
-import { CreateReportMutationVariables, Report } from '../../graphql/generated/graphql'
+import { useEffect, useState } from 'react'
+import { useUserService } from '..'
+import { Report } from '../../types'
+import { getDateFromTimestamp } from '../../utils'
 import { useReportService } from '../useReportService'
 
 function useReport() {
   const [reports, setReports] = useState<Report[]>([])
-  const { getReportsQuery, getReportsLoading, createReportMutation, createReportLoading } = useReportService()
+  const { subscribeToReports, createReport: createReportOnDB } = useReportService()
+  const { getUserFromReference } = useUserService()
 
-  async function getReports() {
-    const { data } = await getReportsQuery()
+  const createReport = async (report: Report) => createReportOnDB(report)
 
-    setReports(data?.reports)
-  }
+  useEffect(() => {
+    const unsubscribe = subscribeToReports({
+      observer: async (querySnapshot) => {
+        const reports = await Promise.all(
+          querySnapshot.docs.map(async (doc) => {
+            const { userRef, createdAt } = doc.data() as Report
+            const user = await getUserFromReference(userRef)
+            const formattedDate = getDateFromTimestamp(createdAt as number)
 
-  async function createReport(report: CreateReportMutationVariables) {
-    try {
-      await createReportMutation({
-        variables: {
-          ...report,
-        },
-      })
-    } catch (error) {
-      console.error('Error to create report', error)
-    }
-  }
+            const reportWithUserData = {
+              ...doc.data(),
+              createdAt: formattedDate,
+              user,
+            } as Report
+
+            return reportWithUserData
+          })
+        )
+
+        setReports(reports as unknown as Report[])
+      },
+    })
+
+    return () => unsubscribe()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return {
-    getReportsLoading,
-    createReportLoading,
     reports,
-    getReports,
     createReport,
   }
 }

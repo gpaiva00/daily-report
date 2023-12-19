@@ -1,5 +1,0 @@
-query GetUserByEmail($email: String = "") {
-  reportUser(where: { email: $email }) {
-    id
-  }
-}

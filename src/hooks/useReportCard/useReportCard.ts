@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 
+const isTextOverflowing = (text: HTMLElement | null) => (text ? text.scrollHeight > text.clientHeight : false)
+
 function useReportCard() {
   const forTodayTextRef = useRef(null)
   const forNextDayTextRef = useRef(null)
   const blocksTextRef = useRef(null)
 
   const [showReadMoreButton, setShowReadMoreButton] = useState(false)
-
-  const isTextOverflowing = (text: HTMLElement | null) => (text ? text.scrollHeight > text.clientHeight : false)
 
   useEffect(() => {
     setShowReadMoreButton(

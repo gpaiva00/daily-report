@@ -1,6 +1,6 @@
-import { Dot, Link } from '@phosphor-icons/react'
-import { Report } from '../../graphql/generated/graphql'
+import { Link } from '@phosphor-icons/react'
 import { useReportCard } from '../../hooks'
+import { Report } from '../../types'
 
 interface ReportCardProps {
   report: Report
@@ -15,20 +15,14 @@ function ReportCard({ report, handleCopyLink }: ReportCardProps) {
       <header className="flex items-center">
         <div className="flex flex-1 items-center gap-4">
           <img
-            src={report.reportUser?.photoUrl || ''}
+            src={report.user?.photoUrl || ''}
             className="h-14 w-14 rounded-full"
           />
-          <div className="flex flex-col">
-            <div className="flex items-center">
-              <h4 className="font-semibold">{report?.reportUser?.name}</h4>
-              <Dot
-                weight="bold"
-                size={30}
-                className="text-zinc-300"
-              />
-              <em className="text-sm font-normal not-italic text-zinc-400">Hoje às 12:30</em>
-            </div>
-            <em className="text-sm font-normal not-italic text-zinc-400">{report?.reportUser?.username}</em>
+          <div className="flex items-center gap-2">
+            <h4 className="text-lg font-bold">{report?.user?.name}</h4>
+            <em className="font-normal not-italic text-gray-500/60">@{report?.user?.username}</em>
+            <span className="text-2xl text-gray-400">{'·'}</span>
+            <em className="font-normal not-italic text-gray-500/60">{report.createdAt}</em>
           </div>
         </div>
         <button
@@ -68,7 +62,7 @@ function ReportCard({ report, handleCopyLink }: ReportCardProps) {
       </div>
 
       {showReadMoreButton && (
-        <footer className="flex w-full">
+        <footer className="flex w-full items-center justify-center">
           <button
             aria-label="ler mais"
             aria-describedby="ler o report por completo"

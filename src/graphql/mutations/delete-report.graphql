@@ -1,5 +1,0 @@
-mutation DeleteReport($id: ID = "") {
-  deleteReport(where: { id: $id }) {
-    id
-  }
-}

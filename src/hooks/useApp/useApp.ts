@@ -1,4 +1,6 @@
-import { BaseSyntheticEvent, useEffect } from 'react'
+import { DocumentReference } from 'firebase/firestore'
+import { nanoid } from 'nanoid'
+import { BaseSyntheticEvent } from 'react'
 import { useReport } from '../useReport/useReport'
 
 interface UseAppProps {
@@ -6,32 +8,29 @@ interface UseAppProps {
 }
 
 function useApp({ toggleModal }: UseAppProps) {
-  const { reports, getReports, createReport, getReportsLoading, createReportLoading } = useReport()
+  const { reports, createReport } = useReport()
 
   function handleCreateReport(e: BaseSyntheticEvent) {
     e.preventDefault()
 
-    const [forTodayText, forNextDayText, blocksText] = e.target.form
+    const [{ value: forTodayText }, { value: forNextDayText }, { value: blocksText }] = e.target.form
+    const id = nanoid()
 
     createReport({
       forTodayText,
       forNextDayText,
       blocksText,
-      link: 'https://google.com',
-      userID: 'clpkhcjg30lxd0bls9zk03m8q',
+      link: `https://daily-report.app/${id}`,
+      id,
+      userRef: 'users/POGY5djICPewSxuuK12H' as unknown as DocumentReference,
+      createdAt: Date.now(),
     })
 
     toggleModal()
   }
 
-  useEffect(() => {
-    getReports()
-  }, [])
-
   return {
     reports,
-    getReportsLoading,
-    createReportLoading,
     handleCreateReport,
   }
 }

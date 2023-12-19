@@ -4,8 +4,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#3b82f6',
+        primary: '#009af4',
         'primary-darken': '#2563eb',
+      },
+      fontFamily: {
+        Afacad: 'Afacad',
       },
     },
   },
