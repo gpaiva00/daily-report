@@ -59,11 +59,8 @@ function CreateReportModal({ isOpen, toggleModal, handleCancelModal, handleSubmi
                   required
                   name="today"
                   rows={5}
-                  className="peer resize-none rounded-sm border border-zinc-200 p-2 font-normal invalid:border-red-500"
+                  className="peer resize-none rounded-sm border border-zinc-200 p-2 font-normal"
                 ></textarea>
-                <span className="invisible text-sm font-normal text-red-500 peer-invalid:visible">
-                  Por favor, preencha este campo.
-                </span>
               </label>
 
               <label
@@ -77,11 +74,8 @@ function CreateReportModal({ isOpen, toggleModal, handleCancelModal, handleSubmi
                   required
                   name="nextDay"
                   rows={5}
-                  className="peer resize-none rounded-sm border border-zinc-200 p-2 font-normal invalid:border-red-500"
+                  className="peer resize-none rounded-sm border border-zinc-200 p-2 font-normal"
                 ></textarea>
-                <span className="invisible text-sm font-normal text-red-500 peer-invalid:visible">
-                  Por favor, preencha este campo.
-                </span>
               </label>
 
               <label

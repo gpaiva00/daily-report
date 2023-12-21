@@ -13,7 +13,7 @@ function App() {
       <CreateReportModal
         isOpen={isModalOpen}
         toggleModal={toggleModal}
-        handleCancelModal={() => {}}
+        handleCancelModal={() => null}
         handleSubmit={handleCreateReport}
         isLoading={false}
       />
@@ -73,6 +73,7 @@ function App() {
           {reports.map((report) => (
             <ReportCard
               handleCopyLink={() => copyToClipboard(report.link)}
+              handleDeleteReport={() => {}}
               report={report}
               key={report.id}
             />

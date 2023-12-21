@@ -1,13 +1,14 @@
-import { Link } from '@phosphor-icons/react'
+import { TrashSimple } from '@phosphor-icons/react'
 import { useReportCard } from '../../hooks'
 import { Report } from '../../types'
 
 interface ReportCardProps {
   report: Report
   handleCopyLink: (link: string) => void
+  handleDeleteReport: (reportId: string) => void
 }
 
-function ReportCard({ report, handleCopyLink }: ReportCardProps) {
+function ReportCard({ report, handleDeleteReport }: ReportCardProps) {
   const { forTodayTextRef, forNextDayTextRef, blocksTextRef, showReadMoreButton } = useReportCard()
 
   return (
@@ -20,12 +21,23 @@ function ReportCard({ report, handleCopyLink }: ReportCardProps) {
           />
           <div className="flex items-center gap-2">
             <h4 className="text-lg font-bold">{report?.user?.name}</h4>
-            <em className="font-normal not-italic text-gray-500/60">@{report?.user?.username}</em>
+            <em className="font-normal not-italic text-gray-400">@{report?.user?.username}</em>
             <span className="text-2xl text-gray-400">{'·'}</span>
-            <em className="font-normal not-italic text-gray-500/60">{report.createdAt}</em>
+            <em className="text-sm font-normal not-italic text-gray-400">{report.createdAt}</em>
           </div>
         </div>
         <button
+          aria-label="excluir report"
+          aria-describedby="excluir report"
+          onClick={() => handleDeleteReport(report.id)}
+          className="rounded-full p-2 transition-colors hover:bg-zinc-200"
+        >
+          <TrashSimple
+            size={20}
+            weight="bold"
+          />
+        </button>
+        {/* <button
           aria-label="copiar link"
           aria-describedby="copiar o link para a área de transferência"
           onClick={() => handleCopyLink(report.link)}
@@ -35,7 +47,7 @@ function ReportCard({ report, handleCopyLink }: ReportCardProps) {
             size={20}
             weight="bold"
           />
-        </button>
+        </button> */}
       </header>
       <div className="flex">
         <p className="flex flex-col gap-4 overflow-hidden">
