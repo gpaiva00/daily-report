@@ -1,5 +1,6 @@
 export * from './useApp'
 export * from './useAppService'
+export * from './useAuth'
 export * from './useModal'
 export * from './useReportCard'
 export * from './useUser'

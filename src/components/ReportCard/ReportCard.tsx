@@ -12,20 +12,61 @@ function ReportCard({ report, handleDeleteReport }: ReportCardProps) {
   const { forTodayTextRef, forNextDayTextRef, blocksTextRef, showReadMoreButton } = useReportCard()
 
   return (
-    <article className="flex w-[700px] flex-col gap-4 rounded-md border border-zinc-200 p-6 shadow-sm shadow-zinc-300">
-      <header className="flex items-center">
-        <div className="flex flex-1 items-center gap-4">
-          <img
-            src={report.user?.photoUrl || ''}
-            className="h-14 w-14 rounded-full"
-          />
-          <div className="flex items-center gap-2">
-            <h4 className="text-lg font-bold">{report?.user?.name}</h4>
-            <em className="font-normal not-italic text-gray-400">@{report?.user?.username}</em>
-            <span className="text-2xl text-gray-400">{'·'}</span>
-            <em className="text-sm font-normal not-italic text-gray-400">{report.createdAt}</em>
-          </div>
+    <article className="flex w-[700px] gap-6 border-b border-zinc-200 p-6">
+      <img
+        src={report.user?.photoUrl || ''}
+        className="h-14 w-14 rounded-full"
+      />
+      <div className="flex flex-1 flex-col gap-2">
+        {/* user infos */}
+        <div className="flex items-center gap-2">
+          <h4 className="text-lg font-extrabold">{report?.user?.name}</h4>
+          <em className="font-normal not-italic text-gray-400">@{report?.user?.username}</em>
+          <span className="text-2xl text-gray-400">{'·'}</span>
+          <em className="font-normal not-italic text-gray-400">{report.createdAt}</em>
         </div>
+        {/* report texts */}
+        <div className="flex">
+          <p className="flex flex-col gap-2 overflow-hidden">
+            <p
+              className="line-clamp-2"
+              ref={forTodayTextRef}
+            >
+              <em className="font-semibold not-italic">Para hoje:</em> {report?.forTodayText}
+            </p>
+            <p
+              className="line-clamp-2"
+              ref={forNextDayTextRef}
+            >
+              <em className="font-semibold not-italic">Para o dia seguinte:</em> {report.forNextDayText}
+            </p>
+            <p
+              className="line-clamp-2"
+              ref={blocksTextRef}
+            >
+              {report?.blocksText &&
+                report.blocksText.length > 0 && [
+                  <em className="font-semibold not-italic">Impedimentos/Bloqueios:</em>,
+                  ' ',
+                  report.blocksText,
+                ]}
+            </p>
+          </p>
+        </div>
+
+        {showReadMoreButton && (
+          <footer className="flex w-full items-center justify-center">
+            <button
+              aria-label="ler mais"
+              aria-describedby="ler o report por completo"
+              className="w-full text-primary hover:underline"
+            >
+              Ler mais
+            </button>
+          </footer>
+        )}
+      </div>
+      <div>
         <button
           aria-label="excluir report"
           aria-describedby="excluir report"
@@ -37,53 +78,18 @@ function ReportCard({ report, handleDeleteReport }: ReportCardProps) {
             weight="bold"
           />
         </button>
-        {/* <button
+      </div>
+      {/* <button
           aria-label="copiar link"
           aria-describedby="copiar o link para a área de transferência"
           onClick={() => handleCopyLink(report.link)}
           className="rounded-full p-2 transition-colors hover:bg-zinc-200"
         >
           <Link
-            size={20}
+            size={DEFAULT_ICON_SIZE}
             weight="bold"
           />
         </button> */}
-      </header>
-      <div className="flex">
-        <p className="flex flex-col gap-4 overflow-hidden">
-          <p
-            className="line-clamp-2"
-            ref={forTodayTextRef}
-          >
-            <b>Para hoje:</b> {report?.forTodayText}
-          </p>
-          <p
-            className="line-clamp-2"
-            ref={forNextDayTextRef}
-          >
-            <b>Para o dia seguinte:</b> {report.forNextDayText}
-          </p>
-          <p
-            className="line-clamp-2"
-            ref={blocksTextRef}
-          >
-            {report?.blocksText &&
-              report.blocksText.length > 0 && [<b>Impedimentos/Bloqueios:</b>, ' ', report.blocksText]}
-          </p>
-        </p>
-      </div>
-
-      {showReadMoreButton && (
-        <footer className="flex w-full items-center justify-center">
-          <button
-            aria-label="ler mais"
-            aria-describedby="ler o report por completo"
-            className="w-full text-primary hover:underline"
-          >
-            Ler mais
-          </button>
-        </footer>
-      )}
     </article>
   )
 }
