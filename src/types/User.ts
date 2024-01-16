@@ -1,4 +1,5 @@
 interface User {
+  ref?: string
   name: string
   username: string
   email: string

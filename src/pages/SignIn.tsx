@@ -13,7 +13,7 @@ function SignIn() {
       </Link>
       <h1 className="text-xl">Vamos lá?</h1>
 
-      <button className="flex items-center gap-4 rounded-md bg-[#1b73e8] px-6 py-3 text-white transition-colors hover:bg-[#1b73e8]/90">
+      <button className="flex items-center gap-2 rounded-md bg-[#1b73e8] px-6 py-3 text-white transition-colors hover:bg-[#1b73e8]/90">
         <img
           className="h-5 w-5"
           src={GoogleLogo}

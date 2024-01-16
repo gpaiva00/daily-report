@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useContext, useState } from 'react'
+import { ReactNode, createContext, useContext, useEffect, useState } from 'react'
 
 import { User } from '../../types'
 
@@ -17,15 +17,15 @@ interface AuthProviderProps {
 }
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [isLoadingUser, setIsLoadingUser] = useState(false)
-  const [isLogged, setIsLogged] = useState(true)
+  const [isLoadingUser] = useState(false)
+  const [isLogged] = useState(true)
   const [user, setUser] = useState<User | null>(null)
 
   // const navigate = useNavigate()
 
-  const signIn = () => {}
+  function signIn() {}
 
-  const signOut = () => {}
+  function signOut() {}
 
   // const signInFallback = async (user: UserFirebase | null) => {}
 
@@ -36,6 +36,17 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   //   return () => unsubscribe()
   // }, [])
+
+  useEffect(() => {
+    setUser(() => ({
+      ref: 'POGY5djICPewSxuuK12H',
+      email: 'papaiva@gmail.com',
+      name: 'Gabriel Paiva',
+      password: '123',
+      photoUrl: 'https://github.com/gpaiva00.png',
+      username: 'papaiva',
+    }))
+  }, [])
 
   return (
     <authContext.Provider

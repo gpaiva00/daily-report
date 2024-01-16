@@ -1,7 +1,7 @@
-import { Balloon, CalendarBlank, PencilSimple, User } from '@phosphor-icons/react'
+import { Balloon, CalendarBlank, PencilSimple } from '@phosphor-icons/react'
 import { Link } from 'react-router-dom'
 import { DEFAULT_ICON_SIZE, PRESENTATION_ROUTE, PROFILE_ROUTE } from '../../constants'
-import { useApp, useModal } from '../../hooks'
+import { useApp, useAuth, useModal } from '../../hooks'
 import { copyToClipboard } from '../../utils/copyToClipboard'
 
 import { ReportCard } from '../../components/ReportCard'
@@ -9,7 +9,8 @@ import { CreateReportModal } from './components/CreateReportModal'
 
 function Home() {
   const { isModalOpen, toggleModal } = useModal()
-  const { reports, handleCreateReport } = useApp({ toggleModal })
+  const { reports, handleCreateReport, handleDeleteReport, shouldDisableCreateButton } = useApp({ toggleModal })
+  const { user } = useAuth()
 
   return (
     <>
@@ -40,7 +41,8 @@ function Home() {
           <button
             aria-label="criar report"
             onClick={toggleModal}
-            className="flex items-center justify-center rounded-full p-4 transition-colors hover:bg-zinc-200"
+            className="flex items-center justify-center rounded-full p-4 transition-colors enabled:hover:bg-zinc-200 disabled:text-zinc-300"
+            disabled={shouldDisableCreateButton}
           >
             <PencilSimple
               size={DEFAULT_ICON_SIZE}
@@ -50,11 +52,11 @@ function Home() {
           <Link
             to={PROFILE_ROUTE}
             aria-label="menu de usuário"
-            className="flex items-center justify-center rounded-full p-4 transition-colors hover:bg-zinc-200"
+            className="flex items-center justify-center rounded-full p-1 transition-colors hover:bg-zinc-200"
           >
-            <User
-              weight="bold"
-              size={DEFAULT_ICON_SIZE}
+            <img
+              src={user?.photoUrl}
+              className="w-14 rounded-full"
             />
           </Link>
         </div>
@@ -68,7 +70,7 @@ function Home() {
             />
           </div>
         )} */}
-      <section className="flex h-screen flex-1 flex-col items-center gap-8 overflow-y-scroll pb-12 pt-8">
+      <section className="flex h-screen flex-1 flex-col items-center gap-8 overflow-y-scroll py-8">
         {!reports.length && (
           <div className="flex h-full flex-col items-center justify-center gap-4">
             <p className="text-zinc-500">Ainda não há reports por aqui.</p>
@@ -82,7 +84,7 @@ function Home() {
         {reports.map((report) => (
           <ReportCard
             handleCopyLink={() => copyToClipboard(report.link)}
-            handleDeleteReport={() => {}}
+            handleDeleteReport={handleDeleteReport}
             report={report}
             key={report.id}
           />

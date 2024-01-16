@@ -1,4 +1,4 @@
-import { DocumentData, QuerySnapshot, collection, doc, onSnapshot, query, setDoc } from 'firebase/firestore'
+import { DocumentData, QuerySnapshot, collection, deleteDoc, doc, onSnapshot, query, setDoc } from 'firebase/firestore'
 import { db } from '../../services'
 import { Report } from '../../types'
 
@@ -11,7 +11,7 @@ function useReportService() {
 
   const reportsCollection = collection(db, reportsDocumentName)
 
-  const subscribeToReports = ({ observer }: SubscribeToReportsProps) => {
+  function subscribeToReports({ observer }: SubscribeToReportsProps) {
     const reportsQuery = query(reportsCollection)
 
     const unsubscribe = onSnapshot(reportsQuery, observer)
@@ -19,16 +19,29 @@ function useReportService() {
     return unsubscribe
   }
 
-  const createReport = async (report: Report) => {
+  async function createReport(report: Report, userRef: string) {
     try {
-      await setDoc(doc(db, reportsDocumentName, report.id), report)
+      const userDocumentReference = doc(db, userRef)
+      await setDoc(doc(db, reportsDocumentName, report.id), {
+        ...report,
+        userRef: userDocumentReference,
+      })
     } catch (error) {
-      console.error('createList', error)
+      console.error('createReport', error)
+    }
+  }
+
+  async function deleteReport(id: string) {
+    try {
+      await deleteDoc(doc(db, reportsDocumentName, id))
+    } catch (error) {
+      console.error('deleteReport', error)
     }
   }
 
   return {
     subscribeToReports,
+    deleteReport,
     createReport,
   }
 }

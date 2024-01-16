@@ -6,10 +6,16 @@ import { useReportService } from '../useReportService'
 
 function useReport() {
   const [reports, setReports] = useState<Report[]>([])
-  const { subscribeToReports, createReport: createReportOnDB } = useReportService()
+  const { subscribeToReports, createReport: createReportOnDB, deleteReport: deleteReportOnDB } = useReportService()
   const { getUserFromReference } = useUserService()
 
-  const createReport = async (report: Report) => createReportOnDB(report)
+  async function createReport({ report, userRef }: { report: Report; userRef: string }) {
+    createReportOnDB(report, userRef)
+  }
+
+  async function deleteReport(id: string) {
+    deleteReportOnDB(id)
+  }
 
   useEffect(() => {
     const unsubscribe = subscribeToReports({
@@ -17,7 +23,7 @@ function useReport() {
         const reports = await Promise.all(
           querySnapshot.docs.map(async (doc) => {
             const { userRef, createdAt } = doc.data() as Report
-            const user = await getUserFromReference(userRef)
+            const user = userRef ? await getUserFromReference(userRef) : {}
             const formattedDate = getDateFromTimestamp(createdAt as number)
 
             const reportWithUserData = {
@@ -41,6 +47,7 @@ function useReport() {
   return {
     reports,
     createReport,
+    deleteReport,
   }
 }
 

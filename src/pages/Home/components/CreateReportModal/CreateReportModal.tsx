@@ -95,7 +95,7 @@ function CreateReportModal({ isOpen, toggleModal, handleCancelModal, handleSubmi
                 <button
                   aria-label="cancelar"
                   onClick={handleCancelModal}
-                  className="w-full rounded-md border border-zinc-300 p-2 capitalize transition-colors hover:border-zinc-200 hover:bg-zinc-200"
+                  className="w-full rounded-md border border-zinc-300 px-6 py-3 capitalize transition-colors hover:border-zinc-200 hover:bg-zinc-200"
                 >
                   Cancelar
                 </button>
@@ -105,7 +105,7 @@ function CreateReportModal({ isOpen, toggleModal, handleCancelModal, handleSubmi
                   data-loading={isLoading}
                   onClick={handleSubmit}
                   disabled={isLoading}
-                  className="w-full rounded-md bg-primary p-2 capitalize text-white transition-colors hover:bg-primary-darken disabled:opacity-30 group-invalid:pointer-events-none group-invalid:opacity-30"
+                  className="w-full rounded-md bg-primary px-6 py-3 capitalize text-white transition-colors hover:bg-primary-darken disabled:opacity-30 group-invalid:pointer-events-none group-invalid:opacity-30"
                 >
                   Criar
                 </button>

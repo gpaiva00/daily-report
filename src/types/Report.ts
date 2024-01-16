@@ -1,4 +1,4 @@
-import { DocumentReference } from 'firebase/firestore'
+import { DocumentData, DocumentReference } from 'firebase/firestore'
 import { User } from './User'
 
 interface Report {
@@ -7,7 +7,7 @@ interface Report {
   blocksText: string
   link: string
   user?: User
-  userRef: DocumentReference
+  userRef?: DocumentReference<DocumentData, DocumentData>
   createdAt: number | string
   id: string
 }

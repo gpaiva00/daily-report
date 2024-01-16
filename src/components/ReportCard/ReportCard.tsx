@@ -9,10 +9,10 @@ interface ReportCardProps {
 }
 
 function ReportCard({ report, handleDeleteReport }: ReportCardProps) {
-  const { forTodayTextRef, forNextDayTextRef, blocksTextRef, showReadMoreButton } = useReportCard()
+  const { forTodayTextRef, forNextDayTextRef, blocksTextRef, shouldShowDeleteButton } = useReportCard(report)
 
   return (
-    <article className="flex w-[700px] gap-6 border-b border-zinc-200 p-6">
+    <article className="flex w-[750px] gap-6 border-b border-zinc-200 p-6">
       <img
         src={report.user?.photoUrl || ''}
         className="h-14 w-14 rounded-full"
@@ -24,24 +24,40 @@ function ReportCard({ report, handleDeleteReport }: ReportCardProps) {
           <em className="font-normal not-italic text-gray-400">@{report?.user?.username}</em>
           <span className="text-2xl text-gray-400">{'·'}</span>
           <em className="font-normal not-italic text-gray-400">{report.createdAt}</em>
+
+          {shouldShowDeleteButton && (
+            <div className="flex flex-1 justify-end">
+              <button
+                aria-label="excluir report"
+                aria-describedby="excluir report"
+                onClick={() => handleDeleteReport(report.id)}
+                className="rounded-full p-2 transition-colors hover:bg-zinc-200"
+              >
+                <TrashSimple
+                  size={20}
+                  weight="bold"
+                />
+              </button>
+            </div>
+          )}
         </div>
         {/* report texts */}
         <div className="flex">
           <p className="flex flex-col gap-2 overflow-hidden">
             <p
-              className="line-clamp-2"
+              // className="line-clamp-2"
               ref={forTodayTextRef}
             >
               <em className="font-semibold not-italic">Para hoje:</em> {report?.forTodayText}
             </p>
             <p
-              className="line-clamp-2"
+              // className="line-clamp-2"
               ref={forNextDayTextRef}
             >
               <em className="font-semibold not-italic">Para o dia seguinte:</em> {report.forNextDayText}
             </p>
             <p
-              className="line-clamp-2"
+              // className="line-clamp-2"
               ref={blocksTextRef}
             >
               {report?.blocksText &&
@@ -54,7 +70,7 @@ function ReportCard({ report, handleDeleteReport }: ReportCardProps) {
           </p>
         </div>
 
-        {showReadMoreButton && (
+        {/* {showReadMoreButton && (
           <footer className="flex w-full items-center justify-center">
             <button
               aria-label="ler mais"
@@ -64,20 +80,7 @@ function ReportCard({ report, handleDeleteReport }: ReportCardProps) {
               Ler mais
             </button>
           </footer>
-        )}
-      </div>
-      <div>
-        <button
-          aria-label="excluir report"
-          aria-describedby="excluir report"
-          onClick={() => handleDeleteReport(report.id)}
-          className="rounded-full p-2 transition-colors hover:bg-zinc-200"
-        >
-          <TrashSimple
-            size={20}
-            weight="bold"
-          />
-        </button>
+        )} */}
       </div>
       {/* <button
           aria-label="copiar link"

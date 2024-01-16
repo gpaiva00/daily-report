@@ -1,6 +1,6 @@
-import { DocumentReference } from 'firebase/firestore'
 import { nanoid } from 'nanoid'
-import { BaseSyntheticEvent } from 'react'
+import { BaseSyntheticEvent, useEffect, useState } from 'react'
+import { useAuth } from '..'
 import { useReport } from '../useReport/useReport'
 
 interface UseAppProps {
@@ -8,7 +8,17 @@ interface UseAppProps {
 }
 
 function useApp({ toggleModal }: UseAppProps) {
-  const { reports, createReport } = useReport()
+  const [shouldDisableCreateButton, setShouldDisableCreateButton] = useState(true)
+  const [selectedDate] = useState(new Date())
+
+  const { reports, createReport, deleteReport } = useReport()
+  const { user } = useAuth()
+
+  useEffect(() => {
+    if (selectedDate !== new Date()) return
+
+    setShouldDisableCreateButton(true)
+  }, [selectedDate])
 
   function handleCreateReport(e: BaseSyntheticEvent) {
     e.preventDefault()
@@ -17,21 +27,33 @@ function useApp({ toggleModal }: UseAppProps) {
     const id = nanoid()
 
     createReport({
-      forTodayText,
-      forNextDayText,
-      blocksText,
-      link: `https://daily-report.app/${id}`,
-      id,
-      userRef: 'users/POGY5djICPewSxuuK12H' as unknown as DocumentReference,
-      createdAt: Date.now(),
+      report: {
+        forTodayText,
+        forNextDayText,
+        blocksText,
+        link: `https://daily-report.app/${id}`,
+        id,
+        createdAt: Date.now(),
+      },
+      userRef: `/users/${user?.ref}`,
     })
 
     toggleModal()
   }
 
+  function handleDeleteReport(id: string) {
+    const confirm = window.confirm('Deseja mesmo apagar este report?')
+
+    if (!confirm) return
+
+    deleteReport(id)
+  }
+
   return {
     reports,
     handleCreateReport,
+    shouldDisableCreateButton,
+    handleDeleteReport,
   }
 }
 
