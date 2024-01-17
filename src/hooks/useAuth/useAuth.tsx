@@ -1,12 +1,15 @@
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react'
 
+import { EMAIL_KEY } from '../../constants'
+import { actionCodeSettings, auth, sendSignInLinkToEmail } from '../../services'
 import { User } from '../../types'
+import { setToStorage } from '../../utils'
 
 interface UseAuthProps {
   isLogged: boolean
   isLoadingUser: boolean
   user: User | null
-  signIn: () => void
+  signIn: (email: string) => void
   signOut: () => void
 }
 
@@ -17,25 +20,9 @@ interface AuthProviderProps {
 }
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [isLoadingUser] = useState(false)
-  const [isLogged] = useState(true)
+  const [isLoadingUser, setIsLoadingUser] = useState(false)
+  const [isLogged, setIsLogged] = useState(false)
   const [user, setUser] = useState<User | null>(null)
-
-  // const navigate = useNavigate()
-
-  function signIn() {}
-
-  function signOut() {}
-
-  // const signInFallback = async (user: UserFirebase | null) => {}
-
-  // const authStateChangedFallback = async (user: UserFirebase | null) => {}
-
-  // useEffect(() => {
-  //   const unsubscribe = auth.onAuthStateChanged(authStateChangedFallback)
-
-  //   return () => unsubscribe()
-  // }, [])
 
   useEffect(() => {
     setUser(() => ({
@@ -47,6 +34,26 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       username: 'papaiva',
     }))
   }, [])
+
+  async function signIn(email: string) {
+    setIsLoadingUser(true)
+
+    try {
+      await sendSignInLinkToEmail(auth, email, actionCodeSettings)
+      setToStorage(EMAIL_KEY, email)
+      setIsLogged(true)
+
+      console.warn('Sign In Successful')
+    } catch (error) {
+      console.error('Error trying to sign in:', error)
+    } finally {
+      setIsLoadingUser(false)
+    }
+  }
+
+  function signOut() {
+    console.log('Sign Out required')
+  }
 
   return (
     <authContext.Provider

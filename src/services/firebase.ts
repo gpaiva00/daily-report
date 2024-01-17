@@ -1,5 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app'
+import { getAuth, sendSignInLinkToEmail } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -16,8 +17,25 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_MEASUREMENT_ID,
 }
 
+const actionCodeSettings = {
+  // URL you want to redirect back to. The domain (www.example.com) for this
+  // URL must be in the authorized domains list in the Firebase Console.
+  url: 'http://localhost:5173/',
+  handleCodeInApp: true,
+  iOS: {
+    bundleId: 'com.example.ios',
+  },
+  android: {
+    packageName: 'com.example.android',
+    installApp: true,
+    minimumVersion: '12',
+  },
+  dynamicLinkDomain: 'daily.report',
+}
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
+const auth = getAuth()
 
-export { app, db }
+export { actionCodeSettings, app, auth, db, sendSignInLinkToEmail }

@@ -25,7 +25,7 @@ function ReportCard({ report, handleDeleteReport }: ReportCardProps) {
       <div className="flex flex-1 flex-col gap-2">
         {/* user infos */}
         <div className="flex items-center gap-2">
-          <h4 className="text-lg font-extrabold">{report?.user?.name}</h4>
+          <h4 className="text-lg">{report?.user?.name}</h4>
           <em className="font-normal not-italic text-gray-400">@{report?.user?.username}</em>
           <span className="text-2xl text-gray-400">{'·'}</span>
           <em className="font-normal not-italic text-gray-400">{report.createdAt}</em>
@@ -48,7 +48,7 @@ function ReportCard({ report, handleDeleteReport }: ReportCardProps) {
         </div>
         {/* report texts */}
         <div className="flex">
-          <p className="flex flex-col gap-2 overflow-hidden">
+          <p className="flex flex-col gap-4 overflow-hidden">
             <p
               // className="line-clamp-2"
               ref={forTodayTextRef}

@@ -1,26 +1,39 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import GoogleLogo from '../assets/google-logo.png'
 import { PRESENTATION_ROUTE } from '../constants'
+import { useAuth } from '../hooks'
 
 function SignIn() {
+  const [email, setEmail] = useState('')
+  const { signIn, isLoadingUser } = useAuth()
+
   return (
-    <main className="flex h-screen w-full flex-1 flex-col items-center justify-center gap-8">
+    <main className="flex h-screen w-full flex-1 flex-col items-center justify-center gap-4">
       <Link
         to={PRESENTATION_ROUTE}
         className="text-center font-Afacad text-6xl font-bold"
       >
         Daily Report
       </Link>
-      <h1 className="text-xl">Vamos lá?</h1>
+      <h1 className="text-xl">Vamos lá? Faça login com o seu e-mail.</h1>
 
-      <button className="flex items-center gap-2 rounded-md bg-[#1b73e8] px-6 py-3 text-white transition-colors hover:bg-[#1b73e8]/90">
-        <img
-          className="h-5 w-5"
-          src={GoogleLogo}
-          alt="Google icon"
+      <div className="mt-8 flex w-80 flex-col gap-4">
+        <input
+          className="w-full rounded-md border border-zinc-200 px-4 py-3"
+          type="email"
+          placeholder="Seu melhor e-mail"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
-        Entrar com Google
-      </button>
+        <button
+          aria-label="fazer login com e-mail"
+          onClick={() => signIn(email)}
+          disabled={isLoadingUser}
+          className="w-full rounded-md bg-primary px-6 py-3 capitalize text-white transition-colors hover:bg-primary-darken disabled:opacity-30 group-invalid:pointer-events-none group-invalid:opacity-30"
+        >
+          Criar
+        </button>
+      </div>
     </main>
   )
 }
