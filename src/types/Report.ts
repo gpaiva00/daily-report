@@ -9,6 +9,7 @@ interface Report {
   user?: User
   userRef?: DocumentReference<DocumentData, DocumentData>
   createdAt: number | string
+  createdAtWithoutHours: number
   id: string
 }
 

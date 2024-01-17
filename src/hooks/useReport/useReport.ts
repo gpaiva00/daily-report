@@ -1,21 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useUserService } from '..'
 import { Report } from '../../types'
-import { getDateFromTimestamp } from '../../utils'
 import { useReportService } from '../useReportService'
 
-function useReport() {
+function useReport(selectedDate: Date) {
   const [reports, setReports] = useState<Report[]>([])
   const { subscribeToReports, createReport: createReportOnDB, deleteReport: deleteReportOnDB } = useReportService()
   const { getUserFromReference } = useUserService()
-
-  async function createReport({ report, userRef }: { report: Report; userRef: string }) {
-    createReportOnDB(report, userRef)
-  }
-
-  async function deleteReport(id: string) {
-    deleteReportOnDB(id)
-  }
 
   useEffect(() => {
     const unsubscribe = subscribeToReports({
@@ -24,7 +15,7 @@ function useReport() {
           querySnapshot.docs.map(async (doc) => {
             const { userRef, createdAt } = doc.data() as Report
             const user = userRef ? await getUserFromReference(userRef) : {}
-            const formattedDate = getDateFromTimestamp(createdAt as number)
+            const formattedDate = `às ${new Date(createdAt).getHours()}h`
 
             const reportWithUserData = {
               ...doc.data(),
@@ -36,13 +27,22 @@ function useReport() {
           })
         )
 
-        setReports(reports as unknown as Report[])
+        setReports(reports as Report[])
       },
+      createdAtTimestamp: new Date(selectedDate.getTime()).setHours(0, 0, 0, 0),
     })
 
     return () => unsubscribe()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [selectedDate])
+
+  async function createReport({ report, userRef }: { report: Report; userRef: string }) {
+    createReportOnDB(report, userRef)
+  }
+
+  async function deleteReport(id: string) {
+    deleteReportOnDB(id)
+  }
 
   return {
     reports,

@@ -1,6 +1,7 @@
 import { nanoid } from 'nanoid'
-import { BaseSyntheticEvent, useEffect, useState } from 'react'
+import { BaseSyntheticEvent, useEffect, useMemo, useState } from 'react'
 import { useAuth } from '..'
+import { isDateToday } from '../../utils'
 import { useReport } from '../useReport/useReport'
 
 interface UseAppProps {
@@ -9,22 +10,22 @@ interface UseAppProps {
 
 function useApp({ toggleModal }: UseAppProps) {
   const [shouldDisableCreateButton, setShouldDisableCreateButton] = useState(true)
-  const [selectedDate] = useState(new Date())
+  const [selectedDate, setSelectedDate] = useState(new Date())
+  const todayDate = useMemo(() => new Date(), [])
 
-  const { reports, createReport, deleteReport } = useReport()
+  const { reports, createReport, deleteReport } = useReport(selectedDate)
   const { user } = useAuth()
 
   useEffect(() => {
-    if (selectedDate !== new Date()) return
-
-    setShouldDisableCreateButton(true)
-  }, [selectedDate])
+    setShouldDisableCreateButton(!isDateToday(selectedDate))
+  }, [selectedDate, todayDate])
 
   function handleCreateReport(e: BaseSyntheticEvent) {
     e.preventDefault()
 
     const [{ value: forTodayText }, { value: forNextDayText }, { value: blocksText }] = e.target.form
     const id = nanoid()
+    const currentDateWithoutHours = new Date().setHours(0, 0, 0, 0)
 
     createReport({
       report: {
@@ -33,6 +34,7 @@ function useApp({ toggleModal }: UseAppProps) {
         blocksText,
         link: `https://daily-report.app/${id}`,
         id,
+        createdAtWithoutHours: currentDateWithoutHours,
         createdAt: Date.now(),
       },
       userRef: `/users/${user?.ref}`,
@@ -49,8 +51,14 @@ function useApp({ toggleModal }: UseAppProps) {
     deleteReport(id)
   }
 
+  function handleSelectedDateChange(date: Date) {
+    setSelectedDate(date)
+  }
+
   return {
     reports,
+    selectedDate,
+    handleSelectedDateChange,
     handleCreateReport,
     shouldDisableCreateButton,
     handleDeleteReport,

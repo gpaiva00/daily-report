@@ -1,9 +1,20 @@
-import { DocumentData, QuerySnapshot, collection, deleteDoc, doc, onSnapshot, query, setDoc } from 'firebase/firestore'
+import {
+  DocumentData,
+  QuerySnapshot,
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  query,
+  setDoc,
+  where,
+} from 'firebase/firestore'
 import { db } from '../../services'
 import { Report } from '../../types'
 
 interface SubscribeToReportsProps {
   observer: (snapshot: QuerySnapshot<DocumentData>) => void
+  createdAtTimestamp: number
 }
 
 function useReportService() {
@@ -11,8 +22,8 @@ function useReportService() {
 
   const reportsCollection = collection(db, reportsDocumentName)
 
-  function subscribeToReports({ observer }: SubscribeToReportsProps) {
-    const reportsQuery = query(reportsCollection)
+  function subscribeToReports({ observer, createdAtTimestamp }: SubscribeToReportsProps) {
+    const reportsQuery = query(reportsCollection, where('createdAtWithoutHours', '==', createdAtTimestamp))
 
     const unsubscribe = onSnapshot(reportsQuery, observer)
 

@@ -6,7 +6,7 @@ const getDateFromTimestamp = (timestamp: number): string => {
   today.setHours(0, 0, 0, 0)
 
   const diffInDays = Math.round((date.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
-  const hoursAndMinutes = `${new Date(timestamp).getHours()}:${new Date(timestamp).getMinutes()}`
+  // const hoursAndMinutes = `${new Date(timestamp).getHours()}:${new Date(timestamp).getMinutes()}`
 
   let formattedDate = ''
 
@@ -24,7 +24,7 @@ const getDateFromTimestamp = (timestamp: number): string => {
       formattedDate = date.toLocaleDateString()
   }
 
-  return `${formattedDate} às ${hoursAndMinutes}`
+  return formattedDate
 }
 
 export { getDateFromTimestamp }

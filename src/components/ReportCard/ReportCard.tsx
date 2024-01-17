@@ -1,4 +1,5 @@
 import { TrashSimple } from '@phosphor-icons/react'
+import classNames from 'classnames'
 import { useReportCard } from '../../hooks'
 import { Report } from '../../types'
 
@@ -12,7 +13,11 @@ function ReportCard({ report, handleDeleteReport }: ReportCardProps) {
   const { forTodayTextRef, forNextDayTextRef, blocksTextRef, shouldShowDeleteButton } = useReportCard(report)
 
   return (
-    <article className="flex w-[750px] gap-6 border-b border-zinc-200 p-6">
+    <article
+      className={classNames('flex w-[750px] gap-6 border-zinc-200 p-6', {
+        'border-b': true,
+      })}
+    >
       <img
         src={report.user?.photoUrl || ''}
         className="h-14 w-14 rounded-full"
