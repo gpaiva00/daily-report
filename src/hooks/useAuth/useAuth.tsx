@@ -1,15 +1,18 @@
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-import { EMAIL_KEY } from '../../constants'
-import { actionCodeSettings, auth, sendSignInLinkToEmail } from '../../services'
+import { GoogleAuthProvider, auth, provider, signInWithPopup } from '../../services/firebase'
+
+import { HOME_ROUTE } from '../../constants'
+import { generateUsername } from '../../utils'
+
 import { User } from '../../types'
-import { setToStorage } from '../../utils'
 
 interface UseAuthProps {
   isLogged: boolean
   isLoadingUser: boolean
   user: User | null
-  signIn: (email: string) => void
+  signIn: () => void
   signOut: () => void
 }
 
@@ -24,6 +27,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isLogged, setIsLogged] = useState(false)
   const [user, setUser] = useState<User | null>(null)
 
+  const navigate = useNavigate()
+
   useEffect(() => {
     setUser(() => ({
       ref: 'POGY5djICPewSxuuK12H',
@@ -35,15 +40,30 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     }))
   }, [])
 
-  async function signIn(email: string) {
+  async function signIn() {
     setIsLoadingUser(true)
 
     try {
-      await sendSignInLinkToEmail(auth, email, actionCodeSettings)
-      setToStorage(EMAIL_KEY, email)
-      setIsLogged(true)
+      const result = await signInWithPopup(auth, provider)
 
-      console.warn('Sign In Successful')
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      const credential = GoogleAuthProvider.credentialFromResult(result)
+      // TODO: save access token
+      const token = credential?.accessToken
+
+      const { email, displayName, photoURL, refreshToken } = result.user
+
+      setUser({
+        email,
+        name: displayName,
+        photoUrl: photoURL,
+        username: generateUsername(displayName),
+      })
+
+      console.warn({ user, token })
+
+      setIsLogged(true)
+      navigate(HOME_ROUTE)
     } catch (error) {
       console.error('Error trying to sign in:', error)
     } finally {
@@ -51,8 +71,17 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   }
 
-  function signOut() {
-    console.log('Sign Out required')
+  async function signOut() {
+    setIsLoadingUser(true)
+
+    try {
+      await signOut()
+      setIsLogged(false)
+    } catch (error) {
+      console.error('Error trying to sign out:', error)
+    } finally {
+      setIsLoadingUser(false)
+    }
   }
 
   return (
