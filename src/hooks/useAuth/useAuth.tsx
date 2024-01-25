@@ -1,9 +1,17 @@
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { GoogleAuthProvider, auth, provider, signInWithPopup } from '../../services/firebase'
+import {
+  UserFirebase,
+  auth,
+  browserSessionPersistence,
+  onAuthStateChanged,
+  provider,
+  setPersistence,
+  signInWithPopup,
+} from '../../services/firebase'
 
-import { HOME_ROUTE } from '../../constants'
+import { HOME_ROUTE, SIGN_IN_ROUTE } from '../../constants'
 import { generateUsername } from '../../utils'
 
 import { User } from '../../types'
@@ -29,38 +37,21 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const navigate = useNavigate()
 
-  useEffect(() => {
-    setUser(() => ({
-      ref: 'POGY5djICPewSxuuK12H',
-      email: 'papaiva@gmail.com',
-      name: 'Gabriel Paiva',
-      password: '123',
-      photoUrl: 'https://github.com/gpaiva00.png',
-      username: 'papaiva',
-    }))
-  }, [])
-
   async function signIn() {
     setIsLoadingUser(true)
 
     try {
+      await setPersistence(auth, browserSessionPersistence)
       const result = await signInWithPopup(auth, provider)
 
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      const credential = GoogleAuthProvider.credentialFromResult(result)
-      // TODO: save access token
-      const token = credential?.accessToken
-
-      const { email, displayName, photoURL, refreshToken } = result.user
+      // const credential = GoogleAuthProvider.credentialFromResult(result)
+      // // TODO: save access token
+      // const token = credential?.accessToken
 
       setUser({
-        email,
-        name: displayName,
-        photoUrl: photoURL,
-        username: generateUsername(displayName),
+        ...result.user,
+        username: generateUsername(result.user.displayName),
       })
-
-      console.warn({ user, token })
 
       setIsLogged(true)
       navigate(HOME_ROUTE)
@@ -77,12 +68,42 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     try {
       await signOut()
       setIsLogged(false)
+      navigate(SIGN_IN_ROUTE)
     } catch (error) {
       console.error('Error trying to sign out:', error)
     } finally {
       setIsLoadingUser(false)
     }
   }
+
+  const handleAuthStateChange = async (user: UserFirebase | null) => {
+    if (user === null) return
+
+    setIsLoadingUser(true)
+
+    try {
+      const { email, displayName, photoURL } = user
+
+      setUser({
+        email,
+        name: displayName,
+        photoUrl: photoURL,
+        username: generateUsername(displayName),
+      })
+
+      setIsLogged(true)
+    } catch (error) {
+      console.error('Error trying to sign in:', error)
+    } finally {
+      setIsLoadingUser(false)
+    }
+  }
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, handleAuthStateChange)
+
+    return () => unsubscribe()
+  }, [])
 
   return (
     <authContext.Provider

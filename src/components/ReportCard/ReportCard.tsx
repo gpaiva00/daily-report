@@ -19,13 +19,13 @@ function ReportCard({ report, handleDeleteReport }: ReportCardProps) {
       })}
     >
       <img
-        src={report.user?.photoUrl || ''}
+        src={report.user?.photoURL || ''}
         className="h-14 w-14 rounded-full"
       />
       <div className="flex flex-1 flex-col gap-2">
         {/* user infos */}
         <div className="flex items-center gap-2">
-          <h4 className="text-lg">{report?.user?.name}</h4>
+          <h4 className="text-lg">{report?.user?.displayName}</h4>
           <em className="font-normal not-italic text-gray-400">@{report?.user?.username}</em>
           <span className="text-2xl text-gray-400">{'·'}</span>
           <em className="font-normal not-italic text-gray-400">{report.createdAt}</em>

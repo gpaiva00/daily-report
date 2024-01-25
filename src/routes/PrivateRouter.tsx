@@ -1,11 +1,10 @@
 import { Navigate, Outlet } from 'react-router-dom'
 
 import { SIGN_IN_ROUTE } from '../constants'
+import { useAuth } from '../hooks'
 
 const PrivateRouter = () => {
-  // const { isLoadingUser, isLogged } = useAuth()
-  const isLogged = true
-  const isLoadingUser = false
+  const { isLoadingUser, isLogged } = useAuth()
 
   if (isLoadingUser) return <p className="dark:text-darkTextLight text-lg">Carregando...</p>
 

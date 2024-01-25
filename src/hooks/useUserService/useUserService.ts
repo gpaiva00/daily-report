@@ -1,8 +1,10 @@
-import { DocumentReference, getDoc } from 'firebase/firestore'
+import { DocumentReference, doc, getDoc, setDoc } from 'firebase/firestore'
+import { db } from '../../services'
+
 import { User } from '../../types'
 
 function useUserService() {
-  // const usersDocumentName = import.meta.env.VITE_USERS_DOCUMENT_NAME as string
+  const usersDocumentName = import.meta.env.VITE_USERS_DOCUMENT_NAME as string
 
   // const usersCollection = collection(db, usersDocumentName)
 
@@ -12,8 +14,17 @@ function useUserService() {
     return user
   }
 
+  async function createUser(user: User) {
+    try {
+      await setDoc(doc(db, usersDocumentName, user.username), user)
+    } catch (error) {
+      console.error('Error trying to create user:', error)
+    }
+  }
+
   return {
     getUserFromReference,
+    createUser,
   }
 }
 

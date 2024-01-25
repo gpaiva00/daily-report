@@ -1,10 +1,8 @@
-interface User {
+import { UserFirebase } from '../services'
+
+interface User extends UserFirebase {
   ref?: string
-  name: string | null
-  username: string | null
-  email: string | null
-  password?: string | null
-  photoUrl: string | null
+  username: string
 }
 
 export type { User }

@@ -83,7 +83,7 @@ function Home() {
             className="flex items-center justify-center rounded-full p-1 transition-colors hover:bg-zinc-200"
           >
             <img
-              src={user?.photoUrl}
+              src={user?.photoURL}
               className="w-14 rounded-full"
             />
           </Link>
