@@ -1,7 +1,9 @@
-import { ArrowLeft, Power } from '@phosphor-icons/react'
 import { useNavigate } from 'react-router-dom'
-import { DEFAULT_ICON_SIZE } from '../../constants'
-import { useAuth } from '../../hooks'
+
+import { DEFAULT_ICON_SIZE } from '@constants'
+import { useAuth } from '@hooks'
+
+import { ArrowLeft, Power } from '@phosphor-icons/react'
 
 function Profile() {
   const { user, signOut, isLoadingUser } = useAuth()

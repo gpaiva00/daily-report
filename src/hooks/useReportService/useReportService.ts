@@ -9,8 +9,10 @@ import {
   setDoc,
   where,
 } from 'firebase/firestore'
-import { db } from '../../services'
-import { Report } from '../../types'
+
+import { db } from '@services'
+
+import { Report } from '@types'
 
 interface SubscribeToReportsProps {
   observer: (snapshot: QuerySnapshot<DocumentData>) => void
@@ -18,7 +20,7 @@ interface SubscribeToReportsProps {
 }
 
 function useReportService() {
-  const reportsDocumentName = import.meta.env.VITE_REPORTS_DOCUMENT_NAME as string
+  const reportsDocumentName = import.meta.env.VITE_REPORTS_DOCUMENT_NAME
 
   const reportsCollection = collection(db, reportsDocumentName)
 
@@ -30,13 +32,9 @@ function useReportService() {
     return unsubscribe
   }
 
-  async function createReport(report: Report, userRef: string) {
+  async function createReport(report: Report) {
     try {
-      const userDocumentReference = doc(db, userRef)
-      await setDoc(doc(db, reportsDocumentName, report.id), {
-        ...report,
-        userRef: userDocumentReference,
-      })
+      await setDoc(doc(db, reportsDocumentName, report.id), report)
     } catch (error) {
       console.error('createReport', error)
     }

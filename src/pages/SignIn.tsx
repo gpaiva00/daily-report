@@ -1,6 +1,6 @@
-import { useAuth } from '../hooks'
+import { useAuth } from '@hooks'
 
-import GoogleLogo from '../assets/google-logo.png'
+import GoogleLogo from '@assets/google-logo.png'
 
 function SignIn() {
   const { signIn, isLoadingUser } = useAuth()

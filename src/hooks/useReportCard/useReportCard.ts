@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
+
+import { Report } from '@types'
 import { useAuth } from '..'
-import { Report } from '../../types'
 
 // const isTextOverflowing = (text: HTMLElement | null) => (text ? text.scrollHeight > text.clientHeight : false)
 
@@ -21,10 +22,10 @@ function useReportCard(report: Report) {
   // }, [forTodayTextRef, forNextDayTextRef, blocksTextRef])
 
   useEffect(() => {
-    if (user?.username != report.user?.username) return
+    if (user?.uid != report.user?.uid) return
 
     setShouldShowDeleteButton(true)
-  }, [user?.username, report.user?.username])
+  }, [user?.uid, report.user?.uid])
 
   return {
     forTodayTextRef,

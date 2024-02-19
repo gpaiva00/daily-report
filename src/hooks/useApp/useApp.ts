@@ -1,7 +1,8 @@
 import { nanoid } from 'nanoid'
 import { BaseSyntheticEvent, useEffect, useMemo, useState } from 'react'
+
+import { isDateToday } from '@utils'
 import { useAuth } from '..'
-import { isDateToday } from '../../utils'
 import { useReport } from '../useReport/useReport'
 
 interface UseAppProps {
@@ -26,18 +27,23 @@ function useApp({ toggleModal }: UseAppProps) {
     const [{ value: forTodayText }, { value: forNextDayText }, { value: blocksText }] = e.target.form
     const id = nanoid()
     const currentDateWithoutHours = new Date().setHours(0, 0, 0, 0)
+    const { displayName, email, photoURL, uid, username } = user!
 
     createReport({
-      report: {
-        forTodayText,
-        forNextDayText,
-        blocksText,
-        link: `https://daily-report.app/${id}`,
-        id,
-        createdAtWithoutHours: currentDateWithoutHours,
-        createdAt: Date.now(),
+      forTodayText,
+      forNextDayText,
+      blocksText,
+      link: `https://daily-report.app/${id}`,
+      id,
+      createdAtWithoutHours: currentDateWithoutHours,
+      createdAt: Date.now(),
+      user: {
+        displayName,
+        email,
+        photoURL,
+        uid,
+        username,
       },
-      userRef: `/users/${user?.ref}`,
     })
 
     toggleModal()

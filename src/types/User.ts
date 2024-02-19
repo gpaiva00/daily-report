@@ -1,6 +1,6 @@
 import { UserFirebase } from '../services'
 
-interface User extends UserFirebase {
+interface User extends Pick<UserFirebase, 'displayName' | 'email' | 'photoURL' | 'uid'> {
   ref?: string
   username: string
 }

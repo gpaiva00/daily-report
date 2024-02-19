@@ -1,4 +1,3 @@
-import { DocumentData, DocumentReference } from 'firebase/firestore'
 import { User } from './User'
 
 interface Report {
@@ -6,8 +5,8 @@ interface Report {
   forNextDayText: string
   blocksText: string
   link: string
-  user?: User
-  userRef?: DocumentReference<DocumentData, DocumentData>
+  user: User | null
+  userUid?: string
   createdAt: number | string
   createdAtWithoutHours: number
   id: string

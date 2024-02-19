@@ -9,12 +9,12 @@ import {
   provider,
   setPersistence,
   signInWithPopup,
-} from '../../services/firebase'
+} from '@services'
 
-import { HOME_ROUTE, SIGN_IN_ROUTE } from '../../constants'
-import { generateUsername } from '../../utils'
+import { HOME_ROUTE, SIGN_IN_ROUTE } from '@constants'
+import { generateUsername } from '@utils'
 
-import { User } from '../../types'
+import { User } from '@types'
 
 interface UseAuthProps {
   isLogged: boolean
@@ -82,13 +82,9 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     setIsLoadingUser(true)
 
     try {
-      const { email, displayName, photoURL } = user
-
       setUser({
-        email,
-        name: displayName,
-        photoUrl: photoURL,
-        username: generateUsername(displayName),
+        ...user,
+        username: generateUsername(user.displayName),
       })
 
       setIsLogged(true)

@@ -1,16 +1,16 @@
-import { CalendarBlank, MagnifyingGlass, PencilSimple } from '@phosphor-icons/react'
 import { MouseEventHandler, forwardRef } from 'react'
 import DatePicker from 'react-datepicker'
 import { Link } from 'react-router-dom'
-import { DEFAULT_ICON_SIZE, PRESENTATION_ROUTE, PROFILE_ROUTE } from '../../constants'
-import { useApp, useAuth, useModal } from '../../hooks'
-import { copyToClipboard } from '../../utils/copyToClipboard'
 
-import { ReportCard } from '../../components/ReportCard'
+import { ReportCard } from '@components'
 import { CreateReportModal } from './components/CreateReportModal'
 
+import { DEFAULT_ICON_SIZE, PRESENTATION_ROUTE, PROFILE_ROUTE } from '@constants'
+import { useApp, useAuth, useModal } from '@hooks'
+import { copyToClipboard, getDateFromTimestamp } from '@utils'
+
+import { CalendarBlank, MagnifyingGlass, PencilSimple } from '@phosphor-icons/react'
 import 'react-datepicker/dist/react-datepicker.css'
-import { getDateFromTimestamp } from '../../utils'
 
 function Home() {
   const { isModalOpen, toggleModal } = useModal()
@@ -83,7 +83,7 @@ function Home() {
             className="flex items-center justify-center rounded-full p-1 transition-colors hover:bg-zinc-200"
           >
             <img
-              src={user?.photoURL}
+              src={user?.photoURL || ''}
               className="w-14 rounded-full"
             />
           </Link>
