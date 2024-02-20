@@ -45,4 +45,5 @@ export {
   signInWithPopup,
   signOut,
 }
+
 export type { UserFirebase }

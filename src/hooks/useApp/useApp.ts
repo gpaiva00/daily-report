@@ -1,7 +1,9 @@
 import { nanoid } from 'nanoid'
-import { BaseSyntheticEvent, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { z } from 'zod'
 
-import { isDateToday } from '@utils'
+import { FormSchemaProps } from '@/pages/Home/components/CreateReportModal/CreateReportModal'
+import { getUserNameInitials, isDateToday } from '@/shared/utils'
 import { useAuth } from '..'
 import { useReport } from '../useReport/useReport'
 
@@ -21,10 +23,9 @@ function useApp({ toggleModal }: UseAppProps) {
     setShouldDisableCreateButton(!isDateToday(selectedDate))
   }, [selectedDate, todayDate])
 
-  function handleCreateReport(e: BaseSyntheticEvent) {
-    e.preventDefault()
+  function handleCreateReport(values: z.infer<FormSchemaProps>) {
+    const { forNextDay: forNextDayText, forToday: forTodayText, blocks: blocksText } = values
 
-    const [{ value: forTodayText }, { value: forNextDayText }, { value: blocksText }] = e.target.form
     const id = nanoid()
     const currentDateWithoutHours = new Date().setHours(0, 0, 0, 0)
     const { displayName, email, photoURL, uid, username } = user!
@@ -57,11 +58,17 @@ function useApp({ toggleModal }: UseAppProps) {
     deleteReport(id)
   }
 
-  function handleSelectedDateChange(date: Date) {
+  function handleSelectedDateChange(date: Date | undefined) {
+    if (!date) return
+
     setSelectedDate(date)
   }
 
   return {
+    user: {
+      ...user,
+      initials: getUserNameInitials(user?.displayName),
+    },
     reports,
     selectedDate,
     handleSelectedDateChange,

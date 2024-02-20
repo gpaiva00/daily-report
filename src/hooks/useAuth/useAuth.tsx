@@ -9,12 +9,12 @@ import {
   provider,
   setPersistence,
   signInWithPopup,
-} from '@services'
+} from '@/services'
 
-import { HOME_ROUTE, SIGN_IN_ROUTE } from '@constants'
-import { generateUsername } from '@utils'
+import { HOME_ROUTE, SIGN_IN_ROUTE } from '@/constants'
+import { generateUsername } from '@/shared/utils'
 
-import { User } from '@types'
+import { User } from '@/types'
 
 interface UseAuthProps {
   isLogged: boolean

@@ -22,40 +22,10 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     // paths
-    "baseUrl": "src",
+    "baseUrl": ".",
     "paths": {
-      "@components": [
-        "components"
-      ],
-      "@utils": [
-        "utils"
-      ],
-      "@routes": [
-        "routes"
-      ],
-      "@types": [
-        "types"
-      ],
-      "@shared": [
-        "shared"
-      ],
-      "@services": [
-        "services"
-      ],
-      "@pages": [
-        "pages"
-      ],
-      "@assets": [
-        "assets"
-      ],
-      "@constants": [
-        "constants"
-      ],
-      "@hooks": [
-        "hooks"
-      ],
-      "@lib": [
-        "lib"
+      "@/*": [
+        "./src/*"
       ]
     }
   },

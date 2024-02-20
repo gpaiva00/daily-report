@@ -10,9 +10,9 @@ import {
   where,
 } from 'firebase/firestore'
 
-import { db } from '@services'
+import { db } from '@/services'
 
-import { Report } from '@types'
+import { Report } from '@/types'
 
 interface SubscribeToReportsProps {
   observer: (snapshot: QuerySnapshot<DocumentData>) => void

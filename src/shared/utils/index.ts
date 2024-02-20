@@ -1,5 +1,6 @@
 export * from './copyToClipboard'
 export * from './generateUserName'
 export * from './getDateFromTimestamp'
+export * from './getUserInitials/getUserInitials'
 export * from './isDateToday'
 export * from './storage'

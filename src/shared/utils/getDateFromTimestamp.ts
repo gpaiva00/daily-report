@@ -1,4 +1,4 @@
-const getDateFromTimestamp = (timestamp: number): string => {
+const getDateFromTimestamp = (timestamp: Date): string => {
   const date = new Date(timestamp)
   date.setHours(0, 0, 0, 0)
 

@@ -1,5 +1,8 @@
-import { TrashSimple } from '@phosphor-icons/react'
-import classNames from 'classnames'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Label } from '@/components/ui/label'
+import { Trash } from 'lucide-react'
 import { useReportCard } from '../../hooks'
 import { Report } from '../../types'
 
@@ -10,95 +13,52 @@ interface ReportCardProps {
 }
 
 function ReportCard({ report, handleDeleteReport }: ReportCardProps) {
-  const { forTodayTextRef, forNextDayTextRef, blocksTextRef, shouldShowDeleteButton } = useReportCard(report)
+  const { shouldShowDeleteButton } = useReportCard(report)
 
   return (
-    <article
-      className={classNames('flex w-[750px] gap-6 border-zinc-200 p-6', {
-        'border-b': true,
-      })}
-    >
-      <img
-        src={report.user?.photoURL || ''}
-        className="h-14 w-14 rounded-full"
-      />
-      <div className="flex flex-1 flex-col gap-2">
+    <Card className="w-[750px]">
+      <CardHeader className="flex-1 flex-row items-center gap-2">
+        <Avatar>
+          <AvatarImage src={report.user?.photoURL || ''} />
+          <AvatarFallback>{report.user?.username}</AvatarFallback>
+        </Avatar>
         {/* user infos */}
-        <div className="flex items-center gap-2">
-          <h4 className="text-lg">{report?.user?.displayName}</h4>
-          <em className="font-normal not-italic text-gray-400">@{report?.user?.username}</em>
-          <span className="text-2xl text-gray-400">{'·'}</span>
-          <em className="font-normal not-italic text-gray-400">{report.createdAt}</em>
+        <CardTitle className="text-lg">{report?.user?.displayName}</CardTitle>
+        <CardDescription>@{report?.user?.username}</CardDescription>
+        <span className="text-2xl text-gray-400">{'·'}</span>
+        <CardDescription>{report.createdAt}</CardDescription>
 
-          {shouldShowDeleteButton && (
-            <div className="flex flex-1 justify-end">
-              <button
-                aria-label="excluir report"
-                aria-describedby="excluir report"
-                onClick={() => handleDeleteReport(report.id)}
-                className="rounded-full p-2 transition-colors hover:bg-zinc-200"
-              >
-                <TrashSimple
-                  size={20}
-                  weight="bold"
-                />
-              </button>
-            </div>
-          )}
-        </div>
-        {/* report texts */}
-        <div className="flex">
-          <p className="flex flex-col gap-4 overflow-hidden">
-            <p
-              // className="line-clamp-2"
-              ref={forTodayTextRef}
+        {shouldShowDeleteButton && (
+          <div className="flex flex-1 justify-end">
+            <Button
+              aria-label="excluir report"
+              aria-describedby="excluir report"
+              onClick={() => handleDeleteReport(report.id)}
+              variant="ghost"
+              size="icon"
             >
-              <em className="font-semibold not-italic">Para hoje:</em> {report?.forTodayText}
-            </p>
-            <p
-              // className="line-clamp-2"
-              ref={forNextDayTextRef}
-            >
-              <em className="font-semibold not-italic">Para o dia seguinte:</em> {report.forNextDayText}
-            </p>
-            <p
-              // className="line-clamp-2"
-              ref={blocksTextRef}
-            >
-              {report?.blocksText &&
-                report.blocksText.length > 0 && [
-                  <em className="font-semibold not-italic">Impedimentos/Bloqueios:</em>,
-                  ' ',
-                  report.blocksText,
-                ]}
-            </p>
-          </p>
-        </div>
+              <Trash />
+            </Button>
+          </div>
+        )}
+        {/* </div> */}
+      </CardHeader>
 
-        {/* {showReadMoreButton && (
-          <footer className="flex w-full items-center justify-center">
-            <button
-              aria-label="ler mais"
-              aria-describedby="ler o report por completo"
-              className="w-full text-primary hover:underline"
-            >
-              Ler mais
-            </button>
-          </footer>
-        )} */}
-      </div>
-      {/* <button
-          aria-label="copiar link"
-          aria-describedby="copiar o link para a área de transferência"
-          onClick={() => handleCopyLink(report.link)}
-          className="rounded-full p-2 transition-colors hover:bg-zinc-200"
+      <CardContent>
+        <p
+        // className="line-clamp-2"
         >
-          <Link
-            size={DEFAULT_ICON_SIZE}
-            weight="bold"
-          />
-        </button> */}
-    </article>
+          <Label>Para hoje - </Label> {report?.forTodayText}
+        </p>
+        <p>
+          <Label>Para o dia seguinte - </Label> {report.forNextDayText}
+        </p>
+        <p>
+          {report?.blocksText &&
+            report.blocksText.length > 0 && [<Label>Bloqueios ou impedimentos - </Label>, ' ', report.blocksText]}
+        </p>
+      </CardContent>
+    </Card>
   )
 }
 

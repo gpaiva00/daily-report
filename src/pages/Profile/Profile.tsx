@@ -1,8 +1,10 @@
 import { useNavigate } from 'react-router-dom'
 
-import { DEFAULT_ICON_SIZE } from '@constants'
-import { useAuth } from '@hooks'
+import { useAuth } from '@/hooks'
 
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowLeft, Power } from '@phosphor-icons/react'
 
 function Profile() {
@@ -16,33 +18,42 @@ function Profile() {
   return (
     <>
       <header className="flex w-full items-center justify-between px-24 pt-4">
-        <button
+        <Button
           aria-label="cancelar"
           onClick={handleGoBack}
-          className="flex items-center gap-2 rounded-md border border-zinc-300 px-6 py-3 capitalize transition-colors hover:border-zinc-200 hover:bg-zinc-200"
+          variant="secondary"
+          className="gap-2"
         >
-          <ArrowLeft size={DEFAULT_ICON_SIZE} />
+          <ArrowLeft />
           Voltar
-        </button>
+        </Button>
       </header>
-      <main className="flex h-screen w-full flex-1 flex-col items-center justify-center gap-8">
-        <img
-          src={user?.photoURL ?? ''}
-          className="w-48 rounded-full"
-        />
-        <div className="flex flex-col items-center gap-2">
-          <h1 className="text-3xl font-extrabold">{user?.displayName}</h1>
-          <em className="text-xl font-normal not-italic text-gray-400">@{user?.username}</em>
-        </div>
-        <button
-          onClick={signOut}
-          disabled={isLoadingUser}
-          className="flex items-center gap-2 rounded-md bg-red-500 px-6 py-3 text-white transition-colors hover:bg-red-600 disabled:opacity-30"
-        >
-          <Power size={DEFAULT_ICON_SIZE} />
-          Sair
-        </button>
-      </main>
+      <section className="flex flex-1 items-center justify-center">
+        <Card className="h-fit w-[750px]">
+          <CardHeader className="items-center justify-center">
+            <Avatar className="h-48 w-48">
+              <AvatarImage src={user?.photoURL ?? ''} />
+              <AvatarFallback>{user?.displayName}</AvatarFallback>
+            </Avatar>
+          </CardHeader>
+          <CardContent className="flex flex-col items-center justify-center">
+            <CardTitle>{user?.displayName}</CardTitle>
+            <CardDescription>@{user?.username}</CardDescription>
+          </CardContent>
+          <CardFooter className="justify-center">
+            <Button
+              onClick={signOut}
+              disabled={isLoadingUser}
+              variant="destructive"
+              size="lg"
+              className="gap-2"
+            >
+              <Power />
+              Sair
+            </Button>
+          </CardFooter>
+        </Card>
+      </section>
     </>
   )
 }
