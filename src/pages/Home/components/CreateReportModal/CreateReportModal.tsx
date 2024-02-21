@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@/shared/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -11,14 +11,13 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Textarea } from '@/components/ui/textarea'
+} from '@/shared/components/ui/dialog'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/shared/components/ui/form'
+import { Textarea } from '@/shared/components/ui/textarea'
 import { useForm } from 'react-hook-form'
 
 interface ModalProps {
   isOpen: boolean
-  handleCancelModal: () => void
   toggleModal: () => void
   handleSubmit: (values: z.infer<typeof formSchema>) => void
   isLoading: boolean
@@ -26,29 +25,54 @@ interface ModalProps {
 
 type FormSchemaProps = z.ZodObject<{
   forToday: z.ZodString
-  forNextDay: z.ZodString
+  nextSteps: z.ZodString
   blocks: z.ZodOptional<z.ZodString>
 }>
 
 const formSchema = z.object({
   forToday: z.string().min(10, { message: 'Este texto deve ter pelo menos 10 caracteres.' }).max(500, {
-    message: 'Este texto deve ter até 500 caracteres',
+    message: 'Este texto deve ter até 500 caracteres.',
   }),
-  forNextDay: z.string().min(10, { message: 'Este texto deve ter pelo menos 10 caracteres.' }).max(500, {
-    message: 'Este texto deve ter até 500 caracteres',
+  nextSteps: z.string().min(10, { message: 'Este texto deve ter pelo menos 10 caracteres.' }).max(500, {
+    message: 'Este texto deve ter até 500 caracteres.',
   }),
-  blocks: z.string().max(300).optional(),
+  blocks: z
+    .string()
+    .max(500, {
+      message: 'Este texto deve ter até 500 caracteres.',
+    })
+    .optional(),
 })
 
-function CreateReportModal({ isOpen, handleSubmit, toggleModal, isLoading, handleCancelModal }: ModalProps) {
+function CreateReportModal({ isOpen, handleSubmit, toggleModal, isLoading }: ModalProps) {
   const form = useForm<z.infer<FormSchemaProps>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       forToday: '',
-      forNextDay: '',
+      nextSteps: '',
       blocks: '',
     },
   })
+
+  function handleClearForm() {
+    form.reset(
+      {
+        blocks: '',
+        nextSteps: '',
+        forToday: '',
+      },
+      {
+        keepErrors: false,
+        keepDirty: false,
+        keepDirtyValues: false,
+        keepValues: false,
+      }
+    )
+
+    form.clearErrors()
+
+    toggleModal()
+  }
 
   return (
     <Dialog
@@ -56,12 +80,10 @@ function CreateReportModal({ isOpen, handleSubmit, toggleModal, isLoading, handl
       modal
       onOpenChange={toggleModal}
     >
-      {/* <DialogPortal> */}
-      {/* <DialogOverlay> */}
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Criar report</DialogTitle>
-          <DialogDescription>Adicione as informações mais relevantes do seu trabalho de hoje.</DialogDescription>
+          <DialogDescription>Descreva as informações mais relevantes do seu trabalho.</DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
@@ -88,7 +110,7 @@ function CreateReportModal({ isOpen, handleSubmit, toggleModal, isLoading, handl
 
             <FormField
               control={form.control}
-              name="forNextDay"
+              name="nextSteps"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="capitalize">para o dia seguinte:</FormLabel>
@@ -123,7 +145,7 @@ function CreateReportModal({ isOpen, handleSubmit, toggleModal, isLoading, handl
             <DialogFooter className="flex justify-between">
               <Button
                 variant="secondary"
-                onClick={handleCancelModal}
+                onClick={handleClearForm}
               >
                 Cancelar
               </Button>
@@ -137,11 +159,10 @@ function CreateReportModal({ isOpen, handleSubmit, toggleModal, isLoading, handl
           </form>
         </Form>
       </DialogContent>
-      {/* </DialogPortal> */}
-      {/* </DialogOverlay> */}
     </Dialog>
   )
 }
 
 export type { FormSchemaProps }
+
 export default CreateReportModal

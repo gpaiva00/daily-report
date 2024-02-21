@@ -1,4 +1,4 @@
-import { auth } from '@/services'
+import { auth } from '@/shared/services'
 
 function useUserService() {
   // const usersDocumentName = import.meta.env.VITE_USERS_DOCUMENT_NAME as string

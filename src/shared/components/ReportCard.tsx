@@ -1,10 +1,12 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
 import { Trash } from 'lucide-react'
-import { useReportCard } from '../../hooks'
-import { Report } from '../../types'
+
+import { useReportCard } from '@/shared/hooks'
+
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar'
+import { Button } from '@/shared/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/components/ui/card'
+
+import { Report } from '@/types'
 
 interface ReportCardProps {
   report: Report
@@ -13,7 +15,7 @@ interface ReportCardProps {
 }
 
 function ReportCard({ report, handleDeleteReport }: ReportCardProps) {
-  const { shouldShowDeleteButton } = useReportCard(report)
+  const { shouldShowDeleteButton, reportDataText } = useReportCard(report)
 
   return (
     <Card className="w-[750px]">
@@ -41,25 +43,23 @@ function ReportCard({ report, handleDeleteReport }: ReportCardProps) {
             </Button>
           </div>
         )}
-        {/* </div> */}
       </CardHeader>
 
-      <CardContent>
-        <p
-        // className="line-clamp-2"
-        >
-          <Label>Para hoje - </Label> {report?.forTodayText}
-        </p>
-        <p>
-          <Label>Para o dia seguinte - </Label> {report.forNextDayText}
-        </p>
-        <p>
-          {report?.blocksText &&
-            report.blocksText.length > 0 && [<Label>Bloqueios ou impedimentos - </Label>, ' ', report.blocksText]}
-        </p>
+      <CardContent className="flex flex-col gap-4">
+        {reportDataText.map((reportData) => {
+          if (!reportData.text) return <></>
+
+          return (
+            <div className="flex flex-col">
+              <strong className="capitalize">{reportData.title}</strong>
+              {/* className="line-clamp-2" */}
+              <p className="last:mt-0">{reportData?.text}</p>
+            </div>
+          )
+        })}
       </CardContent>
     </Card>
   )
 }
 
-export default ReportCard
+export { ReportCard }

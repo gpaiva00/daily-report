@@ -2,8 +2,8 @@ import { User } from './User'
 
 interface Report {
   forTodayText: string
-  forNextDayText: string
-  blocksText: string
+  nextStepsText: string
+  blocksText: string | undefined
   link: string
   user: User | null
   userUid?: string

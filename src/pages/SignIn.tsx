@@ -1,6 +1,6 @@
-import { useAuth } from '@/hooks'
+import { useAuth } from '@/shared/hooks'
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@/shared/components/ui/button'
 
 import GoogleLogo from '@/assets/google-logo.png'
 
@@ -10,7 +10,7 @@ function SignIn() {
   return (
     <main className="flex h-screen w-full flex-1 flex-col items-center justify-center gap-4">
       <h1 className="font-Afacad text-center text-6xl font-bold">Daily Report</h1>
-      <h4 className="text-zinc-600">Vamos lá? Faça login com sua conta Google.</h4>
+      <h4 className="text-muted-foreground">Vamos lá? Faça login com sua conta Google.</h4>
 
       <div className="mt-8 flex w-80 flex-col gap-4">
         <Button

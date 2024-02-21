@@ -2,16 +2,16 @@ import { nanoid } from 'nanoid'
 import { useEffect, useMemo, useState } from 'react'
 import { z } from 'zod'
 
-import { FormSchemaProps } from '@/pages/Home/components/CreateReportModal/CreateReportModal'
+import { useAuth, useReport } from '@/shared/hooks'
 import { getUserNameInitials, isDateToday } from '@/shared/utils'
-import { useAuth } from '..'
-import { useReport } from '../useReport/useReport'
+
+import { FormSchemaProps } from '@/pages/Home/components/CreateReportModal/CreateReportModal'
 
 interface UseAppProps {
   toggleModal: () => void
 }
 
-function useApp({ toggleModal }: UseAppProps) {
+function useHome({ toggleModal }: UseAppProps) {
   const [shouldDisableCreateButton, setShouldDisableCreateButton] = useState(true)
   const [selectedDate, setSelectedDate] = useState(new Date())
   const todayDate = useMemo(() => new Date(), [])
@@ -24,7 +24,7 @@ function useApp({ toggleModal }: UseAppProps) {
   }, [selectedDate, todayDate])
 
   function handleCreateReport(values: z.infer<FormSchemaProps>) {
-    const { forNextDay: forNextDayText, forToday: forTodayText, blocks: blocksText } = values
+    const { nextSteps: nextStepsText, forToday: forTodayText, blocks: blocksText } = values
 
     const id = nanoid()
     const currentDateWithoutHours = new Date().setHours(0, 0, 0, 0)
@@ -32,7 +32,7 @@ function useApp({ toggleModal }: UseAppProps) {
 
     createReport({
       forTodayText,
-      forNextDayText,
+      nextStepsText,
       blocksText,
       link: `https://daily-report.app/${id}`,
       id,
@@ -73,9 +73,9 @@ function useApp({ toggleModal }: UseAppProps) {
     selectedDate,
     handleSelectedDateChange,
     handleCreateReport,
-    shouldDisableCreateButton,
     handleDeleteReport,
+    shouldDisableCreateButton,
   }
 }
 
-export { useApp }
+export { useHome }

@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom'
 
-import { useAuth } from '@/hooks'
+import { useAuth } from '@/shared/hooks'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar'
+import { Button } from '@/shared/components/ui/button'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/shared/components/ui/card'
 import { ArrowLeft, Power } from '@phosphor-icons/react'
 
 function Profile() {

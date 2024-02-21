@@ -10,7 +10,7 @@ import {
   where,
 } from 'firebase/firestore'
 
-import { db } from '@/services'
+import { db } from '@/shared/services'
 
 import { Report } from '@/types'
 

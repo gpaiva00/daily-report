@@ -1,6 +1,7 @@
 import { ReactElement } from 'react'
 import { Outlet } from 'react-router-dom'
-import { AuthProvider } from '../hooks'
+
+import { AuthProvider } from '@/shared/hooks'
 
 const DefaultProvider = ({ children }: { children?: ReactElement }) => {
   return (

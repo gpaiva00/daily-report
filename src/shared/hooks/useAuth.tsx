@@ -9,7 +9,7 @@ import {
   provider,
   setPersistence,
   signInWithPopup,
-} from '@/services'
+} from '@/shared/services'
 
 import { HOME_ROUTE, SIGN_IN_ROUTE } from '@/constants'
 import { generateUsername } from '@/shared/utils'

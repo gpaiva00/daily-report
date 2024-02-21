@@ -1,16 +1,17 @@
 import { Link } from 'react-router-dom'
 
 import { PRESENTATION_ROUTE, PROFILE_ROUTE } from '@/constants'
-import { useApp, useModal } from '@/hooks'
+import { useModal } from '@/shared/hooks'
 import { copyToClipboard, getDateFromTimestamp } from '@/shared/utils'
+import { useHome } from './useHome'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
-import { Calendar } from '@/components/ui/calendar'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar'
+import { Button } from '@/shared/components/ui/button'
+import { Calendar } from '@/shared/components/ui/calendar'
+import { Popover, PopoverContent, PopoverTrigger } from '@/shared/components/ui/popover'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/components/ui/tooltip'
 
-import { ReportCard } from '@/components'
+import { ReportCard } from '@/shared/components'
 import { CreateReportModal } from './components/CreateReportModal'
 
 import { CalendarBlank, PencilSimple } from '@phosphor-icons/react'
@@ -25,15 +26,12 @@ function Home() {
     handleSelectedDateChange,
     selectedDate,
     user,
-  } = useApp({ toggleModal })
-
-  console.warn({ selectedDate })
+  } = useHome({ toggleModal })
 
   return (
     <>
       <CreateReportModal
         isOpen={isModalOpen}
-        handleCancelModal={toggleModal}
         toggleModal={toggleModal}
         handleSubmit={handleCreateReport}
         isLoading={false}
@@ -112,7 +110,7 @@ function Home() {
             />
           </div>
         )} */}
-      <section className="flex h-screen flex-1 flex-col items-center overflow-y-scroll py-8">
+      <section className="mt-10 flex h-screen flex-1 flex-col items-center gap-4 overflow-y-scroll py-8">
         {!reports.length && (
           <div className="flex h-full items-center justify-center">
             <p className="muted">Ops, não há reports por aqui.</p>

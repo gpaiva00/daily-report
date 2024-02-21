@@ -78,9 +78,9 @@ module.exports = {
         contentShow: 'contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
       },
       fontSize: {
-        xs: '0.875rem',
-        sm: '1rem',
-        base: '1.125rem',
+        // xs: '0.875rem',
+        // sm: '1rem',
+        // base: '1.125rem',
       },
     },
   },

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
-import { Report } from '@types'
-import { useReportService } from '../useReportService'
+import { useReportService } from '@/shared/services'
+import { Report } from '@/types'
 
 function useReport(selectedDate: Date) {
   const [reports, setReports] = useState<Report[]>([])
