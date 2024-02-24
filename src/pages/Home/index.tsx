@@ -1,3 +1,4 @@
+import { CalendarIcon, Pencil, UsersRound } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import { PRESENTATION_ROUTE, PROFILE_ROUTE } from '@/constants'
@@ -5,19 +6,18 @@ import { useModal } from '@/shared/hooks'
 import { copyToClipboard, getDateFromTimestamp } from '@/shared/utils'
 import { useHome } from './useHome'
 
+import { ReportCard } from '@/shared/components'
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar'
 import { Button } from '@/shared/components/ui/button'
 import { Calendar } from '@/shared/components/ui/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/components/ui/popover'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/components/ui/tooltip'
-
-import { ReportCard } from '@/shared/components'
-import { CreateReportModal } from './components/CreateReportModal'
-
-import { CalendarBlank, PencilSimple } from '@phosphor-icons/react'
+import { CreateReportModal, TeamsModal } from './components'
 
 function Home() {
-  const { isModalOpen, toggleModal } = useModal()
+  const { isOpen: isCreateReportModalOpen, toggleModal: toggleCreateReportModal } = useModal()
+  const { isOpen: isTeamsModalOpen, toggleModal: toggleTeamsModal } = useModal()
+
   const {
     reports,
     handleCreateReport,
@@ -26,36 +26,56 @@ function Home() {
     handleSelectedDateChange,
     selectedDate,
     user,
-  } = useHome({ toggleModal })
+  } = useHome({ toggleModal: toggleCreateReportModal })
 
   return (
     <>
       <CreateReportModal
-        isOpen={isModalOpen}
-        toggleModal={toggleModal}
+        isOpen={isCreateReportModalOpen}
+        toggleModal={toggleCreateReportModal}
         handleSubmit={handleCreateReport}
         isLoading={false}
+      />
+
+      <TeamsModal
+        isOpen={isTeamsModalOpen}
+        toggleModal={toggleTeamsModal}
       />
 
       <header className="flex w-full items-center justify-between px-24 pt-4">
         <Link
           to={PRESENTATION_ROUTE}
-          className="font-Afacad scroll-m-20 text-2xl font-bold tracking-tight"
+          className="font-Afacad scroll-m-20 text-2xl font-bold capitalize tracking-tight"
         >
           Daily Report
         </Link>
 
         <div className="flex items-center">
+          <Tooltip>
+            <TooltipTrigger>
+              <Button
+                aria-label="opções de times"
+                variant="ghost"
+                onClick={toggleTeamsModal}
+                className="mx-8 gap-2"
+                disabled={false}
+              >
+                <UsersRound />
+                Times
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Criar ou procurar times</TooltipContent>
+          </Tooltip>
           <Popover>
             <PopoverTrigger>
               <Tooltip>
                 <TooltipTrigger>
                   <Button
                     aria-describedby="acessar calendário"
-                    className="gap-2 capitalize"
+                    className="gap-2"
                     variant="ghost"
                   >
-                    <CalendarBlank weight="bold" />
+                    <CalendarIcon />
                     {getDateFromTimestamp(selectedDate)}
                   </Button>
                 </TooltipTrigger>
@@ -80,11 +100,11 @@ function Home() {
               <Button
                 aria-label="criar report"
                 variant="ghost"
-                onClick={toggleModal}
+                onClick={toggleCreateReportModal}
                 className="mx-8 gap-2"
                 disabled={shouldDisableCreateButton}
               >
-                <PencilSimple weight="bold" />
+                <Pencil />
                 Criar
               </Button>
             </TooltipTrigger>

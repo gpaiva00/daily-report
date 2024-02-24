@@ -1,6 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { Button } from '@/shared/components/ui/button'
@@ -14,9 +15,8 @@ import {
 } from '@/shared/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/shared/components/ui/form'
 import { Textarea } from '@/shared/components/ui/textarea'
-import { useForm } from 'react-hook-form'
 
-interface ModalProps {
+interface Props {
   isOpen: boolean
   toggleModal: () => void
   handleSubmit: (values: z.infer<typeof formSchema>) => void
@@ -44,7 +44,7 @@ const formSchema = z.object({
     .optional(),
 })
 
-function CreateReportModal({ isOpen, handleSubmit, toggleModal, isLoading }: ModalProps) {
+function CreateReportModal({ isOpen, handleSubmit, toggleModal, isLoading }: Props) {
   const form = useForm<z.infer<FormSchemaProps>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -82,7 +82,7 @@ function CreateReportModal({ isOpen, handleSubmit, toggleModal, isLoading }: Mod
     >
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Criar report</DialogTitle>
+          <DialogTitle className="capitalize">Criar report</DialogTitle>
           <DialogDescription>Descreva as informações mais relevantes do seu trabalho.</DialogDescription>
         </DialogHeader>
 
@@ -165,4 +165,4 @@ function CreateReportModal({ isOpen, handleSubmit, toggleModal, isLoading }: Mod
 
 export type { FormSchemaProps }
 
-export default CreateReportModal
+export { CreateReportModal }

@@ -2,6 +2,17 @@ import { Trash } from 'lucide-react'
 
 import { useReportCard } from '@/shared/hooks'
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/shared/components/ui/alert-dialog'
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar'
 import { Button } from '@/shared/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/components/ui/card'
@@ -32,15 +43,28 @@ function ReportCard({ report, handleDeleteReport }: ReportCardProps) {
 
         {shouldShowDeleteButton && (
           <div className="flex flex-1 justify-end">
-            <Button
-              aria-label="excluir report"
-              aria-describedby="excluir report"
-              onClick={() => handleDeleteReport(report.id)}
-              variant="ghost"
-              size="icon"
-            >
-              <Trash />
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger>
+                <Button
+                  aria-label="excluir report"
+                  aria-describedby="excluir report"
+                  variant="ghost"
+                  size="icon"
+                >
+                  <Trash />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Apagar este Report?</AlertDialogTitle>
+                  <AlertDialogDescription>Cuidado, esta ação não pode ser desfeita.</AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                  <AlertDialogAction onClick={() => handleDeleteReport(report.id)}>Sim, apagar</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         )}
       </CardHeader>

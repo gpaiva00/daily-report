@@ -5,7 +5,7 @@ import { useAuth } from '@/shared/hooks'
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar'
 import { Button } from '@/shared/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/shared/components/ui/card'
-import { ArrowLeft, Power } from '@phosphor-icons/react'
+import { ArrowLeft, Power } from 'lucide-react'
 
 function Profile() {
   const { user, signOut, isLoadingUser } = useAuth()
