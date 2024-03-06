@@ -17,7 +17,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avat
 import { Button } from '@/shared/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/components/ui/card'
 
-import { Report } from '@/types'
+import { Report } from '@/shared/types'
 
 interface ReportCardProps {
   report: Report

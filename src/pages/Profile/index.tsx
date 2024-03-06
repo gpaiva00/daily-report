@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 
-import { useAuth } from '@/shared/hooks'
+import { useAuthContext } from '@/shared/hooks'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar'
 import { Button } from '@/shared/components/ui/button'
@@ -8,7 +8,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { ArrowLeft, Power } from 'lucide-react'
 
 function Profile() {
-  const { user, signOut, isLoadingUser } = useAuth()
+  // TODO: create useProfile hook
+  const { user, signOut, isLoadingUser } = useAuthContext()
   const navigate = useNavigate()
 
   function handleGoBack() {
@@ -58,4 +59,4 @@ function Profile() {
   )
 }
 
-export default Profile
+export { Profile }

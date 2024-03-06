@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { PRESENTATION_ROUTE, PROFILE_ROUTE } from '@/constants'
 import { useModal } from '@/shared/hooks'
 import { copyToClipboard, getDateFromTimestamp } from '@/shared/utils'
-import { useHome } from './useHome'
+import { useHome } from './hooks'
 
 import { ReportCard } from '@/shared/components'
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar'
@@ -12,11 +12,12 @@ import { Button } from '@/shared/components/ui/button'
 import { Calendar } from '@/shared/components/ui/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/components/ui/popover'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/components/ui/tooltip'
-import { CreateReportModal, TeamsModal } from './components'
+import { CreateReportModal, MustHaveTeamModal, TeamsModal } from './components'
 
 function Home() {
   const { isOpen: isCreateReportModalOpen, toggleModal: toggleCreateReportModal } = useModal()
   const { isOpen: isTeamsModalOpen, toggleModal: toggleTeamsModal } = useModal()
+  const { isOpen: isMustHaveTeamModalOpen, toggleModal: toggleMustHaveReportModal } = useModal()
 
   const {
     reports,
@@ -26,7 +27,9 @@ function Home() {
     handleSelectedDateChange,
     selectedDate,
     user,
-  } = useHome({ toggleModal: toggleCreateReportModal })
+    handleClickOnCreateReport,
+    selectedTeam,
+  } = useHome({ toggleCreateReportModal, toggleMustHaveReportModal })
 
   return (
     <>
@@ -42,12 +45,19 @@ function Home() {
         toggleModal={toggleTeamsModal}
       />
 
+      <MustHaveTeamModal
+        isOpen={isMustHaveTeamModalOpen}
+        toggleModal={toggleMustHaveReportModal}
+        handleSubmit={toggleTeamsModal}
+      />
+
       <header className="flex w-full items-center justify-between px-24 pt-4">
         <Link
           to={PRESENTATION_ROUTE}
           className="font-Afacad scroll-m-20 text-2xl font-bold capitalize tracking-tight"
         >
           Daily Report
+          {selectedTeam && <p className="">| {selectedTeam.name}</p>}
         </Link>
 
         <div className="flex items-center">
@@ -100,7 +110,7 @@ function Home() {
               <Button
                 aria-label="criar report"
                 variant="ghost"
-                onClick={toggleCreateReportModal}
+                onClick={handleClickOnCreateReport}
                 className="mx-8 gap-2"
                 disabled={shouldDisableCreateButton}
               >
@@ -116,7 +126,7 @@ function Home() {
           >
             <Avatar>
               <AvatarImage src={user?.photoURL || ''} />
-              <AvatarFallback>{user.initials}</AvatarFallback>
+              <AvatarFallback>{user?.initials}</AvatarFallback>
             </Avatar>
           </Link>
         </div>
@@ -149,4 +159,4 @@ function Home() {
   )
 }
 
-export default Home
+export { Home }

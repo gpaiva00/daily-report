@@ -1,3 +1,4 @@
+export * from './capitalize'
 export * from './copyToClipboard'
 export * from './generateUserName'
 export * from './getDateFromTimestamp'

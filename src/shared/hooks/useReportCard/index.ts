@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 
-import { useAuth } from '@/shared/hooks'
-import { Report } from '@/types'
+import { useAuthContext } from '@/shared/hooks'
+import { Report } from '@/shared/types'
 
 function useReportCard(report: Report) {
   const [shouldShowDeleteButton, setShouldShowDeleteButton] = useState(false)
-  const { user } = useAuth()
+  const { user } = useAuthContext()
 
   useEffect(() => {
     if (user?.uid != report.user?.uid) return

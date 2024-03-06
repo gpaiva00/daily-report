@@ -11,6 +11,8 @@ interface ImportMetaEnv {
   readonly VITE_MEASUREMENT_ID: string
   readonly VITE_USERS_DOCUMENT_NAME: string
   readonly VITE_REPORTS_DOCUMENT_NAME: string
+  readonly VITE_TEAMS_DOCUMENT_NAME: string
+  readonly VITE_USER_TEAM_DOCUMENT_NAME: string
 }
 
 interface ImportMeta {

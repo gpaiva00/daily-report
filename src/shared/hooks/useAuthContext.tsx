@@ -12,9 +12,9 @@ import {
 } from '@/shared/services'
 
 import { HOME_ROUTE, SIGN_IN_ROUTE } from '@/constants'
-import { generateUsername } from '@/shared/utils'
+import { generateUsername, getUserNameInitials } from '@/shared/utils'
 
-import { User } from '@/types'
+import { User } from '@/shared/types'
 
 interface UseAuthProps {
   isLogged: boolean
@@ -24,7 +24,7 @@ interface UseAuthProps {
   signOut: () => void
 }
 
-const authContext = createContext<UseAuthProps>({} as UseAuthProps)
+const AuthContext = createContext<UseAuthProps>({} as UseAuthProps)
 
 interface AuthProviderProps {
   children: ReactNode
@@ -37,20 +37,23 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const navigate = useNavigate()
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, handleAuthStateChange)
+
+    return () => unsubscribe()
+  }, [])
+
   async function signIn() {
     setIsLoadingUser(true)
 
     try {
       await setPersistence(auth, browserSessionPersistence)
-      const result = await signInWithPopup(auth, provider)
-
-      // const credential = GoogleAuthProvider.credentialFromResult(result)
-      // // TODO: save access token
-      // const token = credential?.accessToken
+      const { user } = await signInWithPopup(auth, provider)
 
       setUser({
-        ...result.user,
-        username: generateUsername(result.user.displayName),
+        ...user,
+        initials: getUserNameInitials(user?.displayName),
+        username: generateUsername(user.displayName),
       })
 
       setIsLogged(true)
@@ -76,7 +79,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   }
 
-  const handleAuthStateChange = async (user: UserFirebase | null) => {
+  async function handleAuthStateChange(user: UserFirebase | null) {
     if (user === null) return
 
     setIsLoadingUser(true)
@@ -84,6 +87,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     try {
       setUser({
         ...user,
+        initials: getUserNameInitials(user?.displayName),
         username: generateUsername(user.displayName),
       })
 
@@ -95,14 +99,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   }
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, handleAuthStateChange)
-
-    return () => unsubscribe()
-  }, [])
-
   return (
-    <authContext.Provider
+    <AuthContext.Provider
       value={{
         isLogged,
         isLoadingUser,
@@ -112,14 +110,14 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       }}
     >
       {children}
-    </authContext.Provider>
+    </AuthContext.Provider>
   )
 }
 
-function useAuth() {
-  const context = useContext(authContext)
+function useAuthContext() {
+  const context = useContext(AuthContext)
 
   return context
 }
 
-export { AuthProvider, useAuth }
+export { AuthProvider, useAuthContext }

@@ -1,11 +1,11 @@
-import { useAuth } from '@/shared/hooks'
+import { useAuthContext } from '@/shared/hooks'
 
 import { Button } from '@/shared/components/ui/button'
 
 import GoogleLogo from '@/assets/google-logo.png'
 
 function SignIn() {
-  const { signIn, isLoadingUser } = useAuth()
+  const { signIn, isLoadingUser } = useAuthContext()
 
   return (
     <main className="flex h-screen w-full flex-1 flex-col items-center justify-center gap-4">

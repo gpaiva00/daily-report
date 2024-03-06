@@ -2,22 +2,26 @@ import { nanoid } from 'nanoid'
 import { useEffect, useMemo, useState } from 'react'
 import { z } from 'zod'
 
-import { useAuth, useReport } from '@/shared/hooks'
-import { getUserNameInitials, isDateToday } from '@/shared/utils'
+import { useAuthContext, useReport } from '@/shared/hooks'
+import { isDateToday } from '@/shared/utils'
 
 import { FormSchemaProps } from '@/pages/Home/components/CreateReportModal'
+import { useTeamContext } from '@/shared/hooks/useTeamContext'
 
 interface UseAppProps {
-  toggleModal: () => void
+  toggleCreateReportModal: () => void
+  toggleMustHaveReportModal: () => void
 }
 
-function useHome({ toggleModal }: UseAppProps) {
+function useHome({ toggleCreateReportModal, toggleMustHaveReportModal }: UseAppProps) {
   const [shouldDisableCreateButton, setShouldDisableCreateButton] = useState(true)
   const [selectedDate, setSelectedDate] = useState(new Date())
+
   const todayDate = useMemo(() => new Date(), [])
 
   const { reports, createReport, deleteReport: handleDeleteReport } = useReport(selectedDate)
-  const { user } = useAuth()
+  const { user } = useAuthContext()
+  const { selectedTeam } = useTeamContext()
 
   useEffect(() => {
     setShouldDisableCreateButton(!isDateToday(selectedDate))
@@ -28,7 +32,6 @@ function useHome({ toggleModal }: UseAppProps) {
 
     const id = nanoid()
     const currentDateWithoutHours = new Date().setHours(0, 0, 0, 0)
-    const { displayName, email, photoURL, uid, username } = user!
 
     createReport({
       forTodayText,
@@ -36,18 +39,13 @@ function useHome({ toggleModal }: UseAppProps) {
       blocksText,
       link: `https://daily-report.app/${id}`,
       id,
+      ownerId: user?.uid,
       createdAtWithoutHours: currentDateWithoutHours,
       createdAt: Date.now(),
-      user: {
-        displayName,
-        email,
-        photoURL,
-        uid,
-        username,
-      },
+      teamId: selectedTeam?.id,
     })
 
-    toggleModal()
+    toggleCreateReportModal()
   }
 
   function handleSelectedDateChange(date: Date | undefined) {
@@ -56,17 +54,24 @@ function useHome({ toggleModal }: UseAppProps) {
     setSelectedDate(date)
   }
 
+  function handleClickOnCreateReport() {
+    if (!selectedTeam) {
+      return toggleMustHaveReportModal()
+    }
+
+    toggleCreateReportModal()
+  }
+
   return {
-    user: {
-      ...user,
-      initials: getUserNameInitials(user?.displayName),
-    },
+    user,
     reports,
     selectedDate,
+    selectedTeam,
     handleSelectedDateChange,
     handleCreateReport,
     handleDeleteReport,
     shouldDisableCreateButton,
+    handleClickOnCreateReport,
   }
 }
 

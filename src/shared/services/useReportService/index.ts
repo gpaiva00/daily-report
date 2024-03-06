@@ -12,18 +12,17 @@ import {
 
 import { db } from '@/shared/services'
 
-import { Report } from '@/types'
+import { Report } from '@/shared/types'
 
 interface SubscribeToReportsProps {
   observer: (snapshot: QuerySnapshot<DocumentData>) => void
   createdAtTimestamp: number
 }
 
+const reportsDocumentName = import.meta.env.VITE_REPORTS_DOCUMENT_NAME
+const reportsCollection = collection(db, reportsDocumentName)
+
 function useReportService() {
-  const reportsDocumentName = import.meta.env.VITE_REPORTS_DOCUMENT_NAME
-
-  const reportsCollection = collection(db, reportsDocumentName)
-
   function subscribeToReports({ observer, createdAtTimestamp }: SubscribeToReportsProps) {
     const reportsQuery = query(reportsCollection, where('createdAtWithoutHours', '==', createdAtTimestamp))
 

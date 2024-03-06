@@ -1,10 +1,10 @@
 import { Outlet } from 'react-router-dom'
 
 // import { SIGN_IN_ROUTE } from '../constants'
-import { useAuth } from '@/shared/hooks'
+import { useAuthContext } from '@/shared/hooks'
 
 const PrivateRouter = () => {
-  const { isLoadingUser, isLogged } = useAuth()
+  const { isLoadingUser, isLogged } = useAuthContext()
 
   if (isLoadingUser) return <p className="dark:text-darkTextLight text-lg">Carregando...</p>
 

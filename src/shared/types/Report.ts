@@ -1,15 +1,16 @@
 import { User } from './User'
 
 interface Report {
+  id: string
+  user?: User
+  ownerId: string | undefined
+  link: string
+  teamId: string | undefined
   forTodayText: string
   nextStepsText: string
-  blocksText: string | undefined
-  link: string
-  user: User | null
-  userUid?: string
   createdAt: number | string
   createdAtWithoutHours: number
-  id: string
+  blocksText: string | undefined
 }
 
 export type { Report }
