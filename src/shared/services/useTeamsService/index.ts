@@ -1,5 +1,5 @@
 import { auth, db } from '@/shared/services'
-import { and, collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore'
+import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore'
 import { z } from 'zod'
 
 import { CreateTeamFormProps } from '@/pages/Home/components/TeamsModal/CreateTeam'
@@ -28,20 +28,22 @@ function useTeamsService() {
 
   async function listTeams() {
     try {
-      return (await getDocs(teamsCollection)).docs
-        .map((doc) => doc.data() as Team)
-        .filter((team) => team.ownerId !== auth.currentUser?.uid)
+      const listTeamsQuery = query(teamsCollection, where('ownerId', '!=', auth.currentUser?.uid ?? null))
+
+      const docsResult = await getDocs(listTeamsQuery)
+
+      if (!docsResult.docs.length) return null
+
+      return docsResult.docs.map((doc) => doc.data()) as unknown as Team[]
     } catch (error) {
       console.error('listTeam', error)
     }
   }
 
   async function userTeam() {
-    // if (!user) return
-
-    const userHasTeamQuery = query(teamsCollection, where('ownerId', '==', auth.currentUser?.uid))
-
     try {
+      const userHasTeamQuery = query(teamsCollection, where('ownerId', '==', auth.currentUser?.uid ?? null))
+
       const docsResult = await getDocs(userHasTeamQuery)
 
       if (!docsResult.docs.length) return null
@@ -54,26 +56,27 @@ function useTeamsService() {
 
   // TODO: user can only be active in one team at a time. So when active one team, must inactive others
   async function userIsCurrentlyOnATeam() {
-    // if (!user) return
-
-    const userIsCurrentlyOnATeamQuery = query(
-      userTeamCollection,
-      and(where('active', '==', 'true'), where('userUid', '==', auth.currentUser?.uid))
-    )
-
     try {
+      const userIsCurrentlyOnATeamQuery = query(
+        userTeamCollection,
+        where('active', '==', true),
+        // ! auth.currentUser is getting undefined
+        where('userUid', '==', auth.currentUser?.uid ?? null)
+      )
+
       const docsResult = await getDocs(userIsCurrentlyOnATeamQuery)
+
       const userIsOnATeam = !!docsResult.docs.length
 
       if (!userIsOnATeam) return null
 
-      const userTeamData = docsResult.docs.map((doc) => doc.data()) as unknown as UserTeam
+      const userTeamData = docsResult.docs.map((doc) => doc.data())[0] as unknown as UserTeam
 
       const docRef = doc(db, 'teams', userTeamData.teamId)
 
       const docSnap = await getDoc(docRef)
 
-      if (!docSnap.exists()) return
+      if (!docSnap.exists()) return null
 
       return docSnap.data() as Team
     } catch (error) {

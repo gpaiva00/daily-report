@@ -31,7 +31,8 @@ function TeamProvider({ children }: Props) {
     }
 
     getCurrentTeam()
-  }, [userIsCurrentlyOnATeam])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     async function getUserTeam() {
@@ -41,7 +42,8 @@ function TeamProvider({ children }: Props) {
     }
 
     getUserTeam()
-  }, [userTeamService])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     async function getAvailableTeams() {
@@ -51,7 +53,8 @@ function TeamProvider({ children }: Props) {
     }
 
     getAvailableTeams()
-  }, [listTeams])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <TeamContext.Provider value={{ selectedTeam, userTeam, availableTeams, setSelectedTeam }}>

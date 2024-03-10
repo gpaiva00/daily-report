@@ -48,7 +48,7 @@ function MyTeam() {
           <div className="mt-4 flex w-full items-center justify-between">
             <div className="flex flex-1 items-center gap-4">
               <Avatar>
-                <AvatarImage src={photoURL} />
+                <AvatarImage src={photoURL ?? undefined} />
                 <AvatarFallback>{initials}</AvatarFallback>
               </Avatar>
               <div className="flex flex-col">
@@ -86,7 +86,7 @@ function MyTeam() {
           <div className="mt-4 flex w-full items-center justify-between">
             <div className="flex flex-1 items-center gap-4">
               <Avatar>
-                <AvatarImage src={photoURL} />
+                <AvatarImage src={photoURL ?? undefined} />
                 <AvatarFallback>{initials}</AvatarFallback>
               </Avatar>
               <div className="flex flex-col">
